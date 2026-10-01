@@ -1,0 +1,3152 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#0c100d" />
+    <title>IRON LOG — Antrenman günlüğü</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0c100d;
+        --surface: #151c17;
+        --border: #2b372d;
+        --accent: #b7ff3c;
+        --text: #f2f5ef;
+        --muted: #a3afa4;
+        --danger: #ffaaaa;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font:
+          16px/1.5 -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+      }
+      button,
+      input,
+      textarea,
+      select {
+        font: inherit;
+      }
+      button,
+      a,
+      input,
+      select,
+      textarea {
+        -webkit-tap-highlight-color: transparent;
+      }
+      button {
+        cursor: pointer;
+        min-height: 46px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 10px 15px;
+        background: #202a22;
+        color: var(--text);
+        font-weight: 650;
+      }
+      button:hover {
+        border-color: #688344;
+      }
+      button:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+      .primary {
+        background: var(--accent);
+        color: #152006;
+        border-color: var(--accent);
+      }
+      .danger {
+        color: var(--danger);
+      }
+      .wide {
+        width: 100%;
+      }
+      input,
+      select,
+      textarea {
+        width: 100%;
+        min-height: 46px;
+        border: 1px solid #3b493d;
+        border-radius: 10px;
+        background: #0e1510;
+        color: var(--text);
+        padding: 10px;
+      }
+      textarea {
+        min-height: 90px;
+        resize: vertical;
+      }
+      input[aria-invalid="true"] {
+        border-color: var(--danger);
+      }
+      input:focus,
+      textarea:focus,
+      select:focus {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+      :focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+      }
+      label {
+        display: block;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      label input,
+      label textarea,
+      label select {
+        margin-top: 5px;
+        color: var(--text);
+      }
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+      h1 {
+        font-size: 28px;
+        letter-spacing: -1px;
+        font-weight: 900;
+      }
+      h1 span {
+        color: var(--accent);
+      }
+      h2 {
+        font-size: 25px;
+        line-height: 1.2;
+        letter-spacing: -0.6px;
+      }
+      h3 {
+        font-size: 18px;
+      }
+      p {
+        margin: 8px 0;
+      }
+      .muted {
+        color: var(--muted);
+      }
+      .small {
+        font-size: 14px;
+      }
+      .eyebrow {
+        font-size: 12px;
+        letter-spacing: 1.8px;
+        font-weight: 750;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 9px;
+      }
+      .app {
+        max-width: 880px;
+        margin: auto;
+        padding: 26px 18px 130px;
+      }
+      .brand {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 20px;
+        margin-bottom: 30px;
+      }
+      .status {
+        font-size: 12px;
+        color: var(--muted);
+        max-width: 150px;
+        text-align: right;
+      }
+      .status::before {
+        content: "● ";
+        color: var(--accent);
+      }
+      .head {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 24px;
+      }
+      .stack {
+        display: grid;
+        gap: 14px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+      .card {
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        background: var(--surface);
+        padding: 20px;
+      }
+      .template-card {
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+      .template-card .letter {
+        font-size: 64px;
+        font-weight: 900;
+        line-height: 1;
+        color: var(--accent);
+        letter-spacing: -5px;
+      }
+      .template-card p {
+        flex: 1;
+      }
+      .row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .between {
+        justify-content: space-between;
+      }
+      .actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 16px;
+      }
+      .empty {
+        text-align: center;
+        padding: 44px 20px;
+        border: 1px dashed var(--border);
+        border-radius: 18px;
+      }
+      .empty .symbol {
+        font-size: 36px;
+        color: var(--accent);
+        margin-bottom: 12px;
+      }
+      .badge {
+        color: var(--accent);
+        background: #26351b;
+        border: 1px solid #41582a;
+        border-radius: 30px;
+        padding: 4px 10px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .section-label {
+        margin: 18px 0 10px;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 1.3px;
+        color: var(--muted);
+      }
+      .previous {
+        background: #101712;
+        border-left: 2px solid #638f34;
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 14px;
+      }
+      .previous p {
+        margin: 2px 0;
+      }
+      .progress-card {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background: #18221a;
+        padding: 16px;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        margin-bottom: 18px;
+      }
+      .progress {
+        height: 7px;
+        background: #334036;
+        border-radius: 9px;
+        overflow: hidden;
+        margin-top: 10px;
+      }
+      .progress > div {
+        height: 100%;
+        background: var(--accent);
+      }
+      details.exercise {
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        background: var(--surface);
+        overflow: hidden;
+      }
+      summary {
+        cursor: pointer;
+        list-style: none;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 17px;
+        min-height: 80px;
+      }
+      summary::-webkit-details-marker {
+        display: none;
+      }
+      summary::after {
+        content: "＋";
+        color: var(--muted);
+        margin-left: auto;
+      }
+      details[open] > summary::after {
+        content: "−";
+      }
+      .icon {
+        font-size: 23px;
+        background: #253026;
+        border-radius: 12px;
+        min-width: 44px;
+        height: 44px;
+        display: grid;
+        place-items: center;
+      }
+      .exercise-title {
+        flex: 1;
+        min-width: 0;
+      }
+      .exercise-title strong {
+        display: block;
+      }
+      .check {
+        color: var(--accent);
+      }
+      .exercise-body {
+        padding: 0 16px 18px;
+        border-top: 1px solid var(--border);
+      }
+      .set-row {
+        display: flex;
+        gap: 8px;
+        align-items: end;
+        padding: 10px 8px;
+        border-radius: 10px;
+        margin-bottom: 6px;
+        background: #101712;
+      }
+      .set-row.done {
+        background: #23331c;
+        box-shadow: inset 2px 0 var(--accent);
+      }
+      .set-number {
+        align-self: center;
+        font-size: 12px;
+        color: var(--muted);
+        width: 28px;
+        flex-shrink: 0;
+      }
+      .set-fields {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(65px, 1fr));
+        flex: 1;
+        gap: 7px;
+        min-width: 0;
+      }
+      .set-fields label {
+        font-size: 12px;
+      }
+      .set-fields input {
+        padding: 8px;
+        min-width: 0;
+      }
+      .tick,
+      .remove-set {
+        padding: 8px;
+        min-width: 44px;
+        flex-shrink: 0;
+      }
+      .tick[aria-pressed="true"] {
+        background: var(--accent);
+        color: #142009;
+      }
+      .remove-set {
+        color: var(--danger);
+      }
+      .set-row.history-edit {
+        flex-wrap: wrap;
+      }
+      .note {
+        margin-top: 14px;
+      }
+      .nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 5;
+        background: #111912f5;
+        border-top: 1px solid var(--border);
+        padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
+      }
+      .nav-inner {
+        max-width: 680px;
+        margin: auto;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 4px;
+      }
+      .nav button {
+        background: transparent;
+        border: 0;
+        color: var(--muted);
+        padding: 7px 2px;
+        font-size: 11px;
+        font-weight: 550;
+      }
+      .nav button span {
+        display: block;
+        font-size: 21px;
+        line-height: 24px;
+        margin-bottom: 3px;
+      }
+      .nav button.active {
+        color: var(--accent);
+        background: #25301c;
+      }
+      .notice {
+        padding: 12px 16px;
+        border: 1px solid #887647;
+        background: #302b19;
+        border-radius: 12px;
+        margin-bottom: 16px;
+        font-size: 14px;
+      }
+      .history-item {
+        width: 100%;
+        text-align: left;
+        padding: 18px;
+        background: var(--surface);
+        border-radius: 15px;
+      }
+      .history-item strong {
+        font-size: 18px;
+      }
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+      .span-2 {
+        grid-column: 1/-1;
+      }
+      dialog {
+        color: var(--text);
+        background: var(--surface);
+        border: 1px solid #4b6045;
+        border-radius: 20px;
+        padding: 24px;
+        width: calc(100% - 28px);
+        max-width: 600px;
+        max-height: 88dvh;
+        overflow: auto;
+      }
+      dialog::backdrop {
+        background: #000b;
+      }
+      dialog h2 {
+        margin-bottom: 14px;
+      }
+      dialog .actions {
+        justify-content: flex-end;
+      }
+      .template-entry {
+        padding: 14px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        margin-top: 12px;
+      }
+      .template-entry .row button {
+        padding: 8px;
+        min-width: 44px;
+      }
+      .readonly-set {
+        border-bottom: 1px solid var(--border);
+        padding: 9px 0;
+      }
+      .preline {
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+      }
+      #toast {
+        position: fixed;
+        bottom: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--accent);
+        color: #152006;
+        border-radius: 10px;
+        padding: 12px 18px;
+        z-index: 20;
+        max-width: 90%;
+        box-shadow: 0 5px 30px #0006;
+      }
+      #toast:empty {
+        display: none;
+      }
+      .footer-note {
+        color: var(--muted);
+        font-size: 13px;
+        margin-top: 22px;
+      }
+      @media (max-width: 600px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .app {
+          padding: 20px 14px 120px;
+        }
+        .brand {
+          margin-bottom: 24px;
+        }
+        .template-card {
+          gap: 12px;
+        }
+        .template-card .letter {
+          font-size: 48px;
+        }
+        .head {
+          align-items: flex-start;
+        }
+        .card {
+          padding: 17px;
+        }
+        .form-grid {
+          gap: 10px;
+        }
+        .set-row {
+          gap: 5px;
+          padding: 8px 5px;
+        }
+        .exercise-body {
+          padding: 0 10px 14px;
+        }
+        h2 {
+          font-size: 23px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          scroll-behavior: auto !important;
+        }
+      }
+      .recommendation {
+        border-color: #638f34;
+        margin-bottom: 24px;
+        background: #192619;
+      }
+      .recommendation ul {
+        padding-left: 22px;
+        color: var(--muted);
+        margin: 16px 0;
+      }
+      .recommendation li {
+        margin: 8px 0;
+      }
+      .recommendation li::marker {
+        color: var(--accent);
+      }
+      .metadata-editor {
+        margin-top: 16px;
+      }
+      .metadata-editor fieldset {
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        margin: 14px 0;
+        padding: 10px;
+        min-width: 0;
+      }
+      .metadata-editor legend {
+        font-size: 14px;
+        color: var(--muted);
+      }
+      .muscle-options {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 6px;
+      }
+      .muscle-options label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 44px;
+        color: var(--text);
+      }
+      .muscle-options input {
+        width: 20px;
+        min-height: 20px;
+        height: 20px;
+        margin: 0;
+        accent-color: var(--accent);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <header class="brand">
+        <div>
+          <h1>IRON <span>LOG</span></h1>
+          <div class="small muted">Fit. Güçlü. Kontrollü.</div>
+        </div>
+        <div id="save-status" class="status" role="status">
+          Cihazında saklanır
+        </div>
+      </header>
+      <div id="warning"></div>
+      <main id="main"></main>
+    </div>
+    <nav class="nav" aria-label="Ana gezinme">
+      <div class="nav-inner">
+        <button data-nav="today"><span>◉</span>Today</button
+        ><button data-nav="history"><span>◷</span>History</button
+        ><button data-nav="templates"><span>▤</span>Templates</button
+        ><button data-nav="exercises"><span>⌘</span>Exercises</button
+        ><button data-nav="data"><span>⇅</span>Data</button>
+      </div>
+    </nav>
+    <dialog id="modal"></dialog>
+    <div id="toast" role="status"></div>
+    <script>
+      (() => {
+        "use strict";
+        // ==================== DATA ====================
+        const VERSION = 2,
+          STORAGE_KEY = "iron-log-state";
+        const uid = () =>
+          globalThis.crypto?.randomUUID?.() ||
+          `id-${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
+        const clone = (value) => JSON.parse(JSON.stringify(value));
+        const localDate = (d = new Date()) =>
+          `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+        const esc = (value) =>
+          String(value ?? "").replace(
+            /[&<>"']/g,
+            (c) =>
+              ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;",
+              })[c],
+          );
+        const dateLabel = (value) =>
+          new Date(`${value}T12:00:00`).toLocaleDateString("tr-TR", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          });
+        const timeLabel = (value) =>
+          value
+            ? new Date(value).toLocaleTimeString("tr-TR", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })
+            : "Belirtilmedi";
+        const TYPES = {
+          weight_reps: "Ağırlık + tekrar",
+          assisted_weight_reps: "Destek + tekrar",
+          bodyweight_reps: "Vücut ağırlığı + tekrar",
+          duration: "Süre",
+          distance: "Mesafe",
+          cardio: "Kardiyo (süre + mesafe)",
+        };
+        const FIELDS = {
+          weight_reps: [
+            ["weight", "Ağırlık · kg"],
+            ["reps", "Tekrar"],
+          ],
+          assisted_weight_reps: [
+            ["assistance", "Destek · kg"],
+            ["reps", "Tekrar"],
+          ],
+          bodyweight_reps: [["reps", "Tekrar"]],
+          duration: [["duration", "Süre · sn"]],
+          distance: [["distance", "Mesafe · m"]],
+          cardio: [
+            ["duration", "Süre · sn"],
+            ["distance", "Mesafe · m"],
+          ],
+        };
+        // ==================== PROGRAM CATALOG & METADATA ====================
+        const MUSCLE_GROUPS = {
+          back: "Sırt",
+          biceps: "Biceps",
+          chest: "Göğüs",
+          shoulders: "Omuz",
+          triceps: "Triceps",
+          legs: "Bacak",
+          rear_delts: "Arka omuz",
+          core: "Karın",
+          grip: "Kavrama",
+          glutes: "Kalça",
+          calves: "Baldır",
+          lower_back: "Bel",
+        };
+        // Canonical IDs preserve cross-template previous performance. Aliases only
+        // match equivalent exercises; dumbbell and machine variants stay distinct.
+        const EXERCISE_CATALOG = [
+          [
+            "row",
+            "Rowing Machine",
+            "🚣",
+            "cardio",
+            1,
+            null,
+            null,
+            [],
+            [],
+            ["Rowing"],
+          ],
+          [
+            "pull",
+            "Assisted Pull-up",
+            "🧗",
+            "assisted_weight_reps",
+            3,
+            6,
+            10,
+            ["back"],
+            ["biceps", "grip"],
+            [],
+          ],
+          [
+            "leg",
+            "Leg Press",
+            "🦵",
+            "weight_reps",
+            3,
+            8,
+            12,
+            ["legs"],
+            ["glutes"],
+            [],
+          ],
+          [
+            "cable",
+            "Seated Cable Row",
+            "🚣",
+            "weight_reps",
+            3,
+            8,
+            12,
+            ["back"],
+            ["biceps", "rear_delts"],
+            [],
+          ],
+          [
+            "lat",
+            "Lat Pulldown",
+            "⬇️",
+            "weight_reps",
+            3,
+            8,
+            12,
+            ["back"],
+            ["biceps"],
+            [],
+          ],
+          ["plank", "Plank", "🧱", "duration", 3, null, null, ["core"], [], []],
+          [
+            "hang",
+            "Dead Hang",
+            "✋",
+            "duration",
+            3,
+            null,
+            null,
+            ["grip"],
+            [],
+            [],
+          ],
+          [
+            "push",
+            "Şınav",
+            "🤜",
+            "bodyweight_reps",
+            3,
+            null,
+            null,
+            ["chest"],
+            ["triceps"],
+            ["Push-up", "Push Up"],
+          ],
+          [
+            "stationary-bike",
+            "Stationary Bike",
+            "🚲",
+            "cardio",
+            1,
+            null,
+            null,
+            [],
+            [],
+            ["Sabit Bisiklet"],
+          ],
+          [
+            "chest-press",
+            "Chest Press Machine",
+            "💪",
+            "weight_reps",
+            3,
+            8,
+            12,
+            ["chest"],
+            ["triceps", "shoulders"],
+            ["Chest Press"],
+          ],
+          [
+            "incline-bench",
+            "Incline Bench Press",
+            "🏋️",
+            "weight_reps",
+            3,
+            8,
+            12,
+            ["chest"],
+            ["shoulders", "triceps"],
+            [],
+          ],
+          [
+            "pec-deck",
+            "Pec Deck / Chest Fly",
+            "🦋",
+            "weight_reps",
+            3,
+            10,
+            15,
+            ["chest"],
+            [],
+            ["Pec Deck", "Chest Fly"],
+          ],
+          [
+            "reverse-pec-deck",
+            "Reverse Pec Deck / Rear Delt Fly",
+            "🪽",
+            "weight_reps",
+            3,
+            12,
+            15,
+            ["rear_delts"],
+            ["back"],
+            ["Reverse Pec Deck", "Rear Delt Fly"],
+          ],
+          [
+            "preacher-curl",
+            "Preacher Curl",
+            "💪",
+            "weight_reps",
+            3,
+            8,
+            12,
+            ["biceps"],
+            [],
+            [],
+          ],
+          [
+            "ez-curl",
+            "EZ Curl",
+            "💪",
+            "weight_reps",
+            2,
+            10,
+            15,
+            ["biceps"],
+            [],
+            ["EZ Bar Curl"],
+          ],
+          [
+            "lateral-machine",
+            "Lateral Raise Machine",
+            "🪽",
+            "weight_reps",
+            3,
+            10,
+            15,
+            ["shoulders"],
+            [],
+            [],
+          ],
+          [
+            "assisted-dip",
+            "Dip / Assisted Dip",
+            "🏋️",
+            "assisted_weight_reps",
+            3,
+            6,
+            12,
+            ["triceps"],
+            ["chest", "shoulders"],
+            ["Assisted Dip", "Dip"],
+          ],
+          [
+            "leg-curl",
+            "Leg Curl",
+            "🦵",
+            "weight_reps",
+            3,
+            10,
+            15,
+            ["legs"],
+            [],
+            [],
+          ],
+          [
+            "leg-extension",
+            "Leg Extension",
+            "🦵",
+            "weight_reps",
+            3,
+            10,
+            15,
+            ["legs"],
+            [],
+            [],
+          ],
+          [
+            "hip-adductor",
+            "Hip Adductor",
+            "🦵",
+            "weight_reps",
+            3,
+            12,
+            15,
+            ["legs"],
+            [],
+            [],
+          ],
+          [
+            "calf-raise",
+            "Calf Raise",
+            "🦵",
+            "weight_reps",
+            3,
+            10,
+            15,
+            ["calves"],
+            [],
+            [],
+          ],
+          [
+            "back-extension",
+            "Back Extension",
+            "🏋️",
+            "bodyweight_reps",
+            2,
+            10,
+            15,
+            ["lower_back"],
+            ["glutes"],
+            [],
+          ],
+          [
+            "side-plank",
+            "Side Plank",
+            "🧱",
+            "duration",
+            2,
+            null,
+            null,
+            ["core"],
+            [],
+            [],
+          ],
+          [
+            "bicycle-crunch",
+            "Bicycle Crunch",
+            "🚴",
+            "bodyweight_reps",
+            3,
+            12,
+            20,
+            ["core"],
+            [],
+            [],
+          ],
+          [
+            "russian-twist",
+            "Russian Twist",
+            "↔️",
+            "bodyweight_reps",
+            3,
+            10,
+            20,
+            ["core"],
+            [],
+            [],
+          ],
+          [
+            "mountain-climber",
+            "Mountain Climber",
+            "⛰️",
+            "duration",
+            3,
+            null,
+            null,
+            ["core"],
+            ["shoulders"],
+            [],
+          ],
+          [
+            "treadmill",
+            "Treadmill",
+            "🚶",
+            "cardio",
+            1,
+            null,
+            null,
+            [],
+            [],
+            ["Koşu Bandı"],
+          ],
+          [
+            "elliptical",
+            "Elliptical",
+            "🚶",
+            "cardio",
+            1,
+            null,
+            null,
+            [],
+            [],
+            ["Eliptik"],
+          ],
+          // Existing v1 variants are recognized without modifying their definitions.
+          [
+            "shoulder",
+            "Dumbbell Shoulder Press",
+            "🏋️",
+            "weight_reps",
+            3,
+            8,
+            12,
+            ["shoulders"],
+            ["triceps"],
+            [],
+          ],
+          [
+            "lateral",
+            "Dumbbell Lateral Raise",
+            "🪽",
+            "weight_reps",
+            3,
+            10,
+            15,
+            ["shoulders"],
+            [],
+            ["Lateral Raise"],
+          ],
+          [
+            "rdl",
+            "Dumbbell Romanian Deadlift",
+            "🏋️",
+            "weight_reps",
+            3,
+            8,
+            10,
+            ["legs"],
+            ["glutes", "lower_back"],
+            [],
+          ],
+          [
+            "incline",
+            "Incline Dumbbell Press",
+            "💪",
+            "weight_reps",
+            3,
+            8,
+            12,
+            ["chest"],
+            ["triceps", "shoulders"],
+            [],
+          ],
+          [
+            "face",
+            "Face Pull",
+            "🎯",
+            "weight_reps",
+            3,
+            12,
+            15,
+            ["rear_delts"],
+            ["back"],
+            [],
+          ],
+          [
+            "knee",
+            "Hanging Knee Raise",
+            "🧱",
+            "bodyweight_reps",
+            3,
+            8,
+            15,
+            ["core"],
+            ["grip"],
+            [],
+          ],
+        ];
+        const PROGRAM_CATALOG = [
+          {
+            id: "split-back-biceps",
+            name: "Sırt + Biceps",
+            icon: "💪",
+            primary: ["back", "biceps"],
+            secondary: ["rear_delts", "core", "grip"],
+            intensity: "normal",
+            entries: [
+              ["row", 1, "5 dk ısınma"],
+              ["pull", 3, "3 × 6–10"],
+              ["lat", 3, "3 × 8–12"],
+              ["cable", 3, "3 × 8–12"],
+              ["reverse-pec-deck", 3, "3 × 12–15"],
+              ["preacher-curl", 3, "3 × 8–12"],
+              ["ez-curl", 2, "2 × 10–15"],
+              ["hang", 3, "3 set"],
+              ["bicycle-crunch", 3, "3 × 12–20 / taraf"],
+            ],
+          },
+          {
+            id: "split-chest-shoulders-triceps",
+            name: "Göğüs + Omuz + Triceps",
+            icon: "🏋️",
+            primary: ["chest", "shoulders", "triceps"],
+            secondary: ["core"],
+            intensity: "normal",
+            entries: [
+              ["stationary-bike", 1, "5 dk"],
+              ["chest-press", 3, "3 × 8–12"],
+              ["incline-bench", 3, "3 × 8–12"],
+              ["pec-deck", 3, "3 × 10–15"],
+              ["lateral-machine", 3, "3 × 10–15"],
+              ["reverse-pec-deck", 2, "2 × 12–15"],
+              ["assisted-dip", 3, "3 × 6–12"],
+              ["plank", 3, "3 × 30–60 sn"],
+            ],
+          },
+          {
+            id: "split-legs",
+            name: "Bacak",
+            icon: "🦵",
+            primary: ["legs"],
+            secondary: ["glutes", "calves", "lower_back", "core"],
+            intensity: "normal",
+            entries: [
+              ["stationary-bike", 1, "5–7 dk"],
+              ["leg", 3, "3 × 8–12"],
+              ["leg-curl", 3, "3 × 10–15"],
+              ["leg-extension", 3, "3 × 10–15"],
+              ["hip-adductor", 3, "3 × 12–15"],
+              ["calf-raise", 3, "3 × 10–15"],
+              ["back-extension", 2, "2 × 10–15"],
+              ["side-plank", 2, "2 × 30–45 sn / taraf"],
+              ["treadmill", 1, "15–20 dk"],
+            ],
+          },
+          {
+            id: "split-legs-chest",
+            name: "Bacak + Göğüs",
+            icon: "🦵",
+            primary: ["legs", "chest"],
+            secondary: ["triceps", "core"],
+            intensity: "normal",
+            entries: [
+              ["row", 1, "5 dk · Rowing veya Stationary Bike"],
+              ["leg", 3, "3 × 8–12"],
+              ["leg-curl", 3, "3 × 10–15"],
+              ["leg-extension", 2, "2 × 10–15"],
+              ["chest-press", 3, "3 × 8–12"],
+              ["incline-bench", 3, "3 × 8–12"],
+              ["pec-deck", 2, "2 × 10–15"],
+              ["push", 2, "2 set"],
+              ["russian-twist", 3, "3 × 10–20 / taraf"],
+            ],
+          },
+          {
+            id: "full-body",
+            name: "Full Body",
+            icon: "⚡",
+            primary: ["back", "chest", "legs", "shoulders"],
+            secondary: ["biceps", "triceps", "core"],
+            intensity: "normal",
+            entries: [
+              ["row", 1, "5 dk"],
+              ["pull", 3, "3 × 6–10"],
+              ["leg", 3, "3 × 8–12"],
+              ["chest-press", 3, "3 × 8–12"],
+              ["cable", 3, "3 × 8–12"],
+              ["leg-curl", 3, "3 × 10–15"],
+              ["lateral-machine", 2, "2 × 12–15"],
+              ["plank", 3, "3 × 30–60 sn"],
+              ["treadmill", 1, "15–20 dk"],
+            ],
+          },
+          {
+            id: "hard-mode",
+            name: "🔥 HARD MODE",
+            icon: "🔥",
+            primary: ["back", "chest", "legs", "shoulders"],
+            secondary: ["biceps", "triceps", "core", "grip"],
+            intensity: "hard",
+            entries: [
+              ["row", 1, "5 dk"],
+              ["pull", 3, "3 × 6–10"],
+              ["leg", 3, "3 × 8–12"],
+              ["incline-bench", 3, "3 × 8–12"],
+              ["cable", 3, "3 × 8–12"],
+              ["leg-curl", 3, "3 × 10–15"],
+              ["lateral-machine", 3, "3 × 12–15"],
+              ["push", 3, "3 set"],
+              ["hang", 3, "3 set"],
+              ["plank", 3, "3 × 30–60 sn"],
+              ["bicycle-crunch", 3, "3 × 12–20 / taraf"],
+              ["mountain-climber", 3, "3 × 20–30 sn"],
+              ["treadmill", 1, "20–30 dk · Treadmill veya Elliptical"],
+            ],
+          },
+        ];
+        const normalizeExerciseName = (name) =>
+          name
+            .normalize("NFKC")
+            .toLowerCase()
+            .replace(/ı/g, "i")
+            .replace(/[^\p{L}\p{N}]/gu, "");
+        function catalogExercise(exercise) {
+          return (
+            EXERCISE_CATALOG.find((e) => e[0] === exercise.id) ||
+            EXERCISE_CATALOG.find((e) =>
+              [e[1], ...e[9]].some(
+                (name) =>
+                  normalizeExerciseName(name) ===
+                  normalizeExerciseName(exercise.name),
+              ),
+            )
+          );
+        }
+        function inferMuscleGroups(exercises) {
+          const primary = new Set(),
+            secondary = new Set();
+          for (const e of exercises) {
+            const definition = catalogExercise(e);
+            if (!definition) continue;
+            definition[7].forEach((g) => primary.add(g));
+            definition[8].forEach((g) => secondary.add(g));
+          }
+          const accessory = [
+            "rear_delts",
+            "core",
+            "grip",
+            "glutes",
+            "calves",
+            "lower_back",
+          ];
+          if ([...primary].some((g) => !accessory.includes(g)))
+            for (const g of accessory) if (primary.delete(g)) secondary.add(g);
+          return {
+            primary: [...primary],
+            secondary: [...secondary].filter((g) => !primary.has(g)),
+          };
+        }
+        function templateMetadata(template, source) {
+          return {
+            muscleGroups: clone(
+              template.muscleGroups ||
+                inferMuscleGroups(
+                  template.exercises
+                    .map((r) =>
+                      source.exercises.find((e) => e.id === r.exerciseId),
+                    )
+                    .filter(Boolean),
+                ),
+            ),
+            intensity: template.intensity || "normal",
+          };
+        }
+        function seedAdditionalPrograms(data) {
+          const seeded = new Set(data.settings.seededPrograms || []);
+          const exerciseIds = new Map();
+          const ensureExercise = (definition) => {
+            const [id, name, icon, type, defaultSets, minReps, maxReps] =
+              definition;
+            let existing =
+              data.exercises.find((e) => e.id === id) ||
+              data.exercises.find((e) =>
+                [name, ...definition[9]].some(
+                  (alias) =>
+                    normalizeExerciseName(alias) ===
+                    normalizeExerciseName(e.name),
+                ),
+              );
+            if (!existing) {
+              existing = {
+                id,
+                name,
+                icon,
+                type,
+                defaultSets,
+                minReps,
+                maxReps,
+                notes:
+                  id === "assisted-dip"
+                    ? "Desteksiz dip için destek alanına 0 gir. Ekipman yoksa programdan kaldırabilirsin."
+                    : "",
+              };
+              data.exercises.push(existing);
+            }
+            exerciseIds.set(id, existing.id);
+            return existing.id;
+          };
+          for (const program of PROGRAM_CATALOG) {
+            if (seeded.has(program.id)) continue;
+            const existing =
+              data.templates.find((t) => t.id === program.id) ||
+              data.templates.find(
+                (t) =>
+                  normalizeExerciseName(t.name) ===
+                  normalizeExerciseName(program.name),
+              );
+            if (!existing) {
+              const entries = program.entries.map(([id, sets, target]) => ({
+                id: uid(),
+                exerciseId:
+                  exerciseIds.get(id) ||
+                  ensureExercise(EXERCISE_CATALOG.find((e) => e[0] === id)),
+                sets,
+                target,
+              }));
+              data.templates.push({
+                id: program.id,
+                name: program.name,
+                icon: program.icon,
+                muscleGroups: {
+                  primary: [...program.primary],
+                  secondary: [...program.secondary],
+                },
+                intensity: program.intensity,
+                exercises: entries,
+              });
+            }
+            seeded.add(program.id);
+          }
+          // Optional equipment alternative; seed only once, respecting future deletion.
+          if (!seeded.has("equipment-alternatives-v2")) {
+            ensureExercise(EXERCISE_CATALOG.find((e) => e[0] === "elliptical"));
+            seeded.add("equipment-alternatives-v2");
+          }
+          data.settings.seededPrograms = [...seeded];
+          return data;
+        }
+        // ==================== RECOMMENDATION CONSTANTS ====================
+        // Heuristic ranking, not a medical recovery estimate. Seven-day-old loads
+        // and streaks have zero penalty. All coefficients are centralized here.
+        const RECOVERY_PENALTIES = {
+          0: 100,
+          1: 70,
+          2: 40,
+          3: 20,
+          4: 5,
+          5: 2,
+          6: 1,
+        };
+        const LOAD_DECAY = {
+          0: 1,
+          1: 1,
+          2: 0.6,
+          3: 0.35,
+          4: 0.15,
+          5: 0.08,
+          6: 0.03,
+        };
+        const NEGLECT_BONUSES = { 0: 0, 2: 3, 4: 10, 7: 20, 10: 28, 14: 32 };
+        const PRIMARY_MUSCLE_WEIGHT = 3,
+          SECONDARY_MUSCLE_WEIGHT = 1;
+        const HARD_MODE_MULTIPLIER = 1.5,
+          SUNDAY_HARD_MODE_BONUS = 3,
+          STREAK_PENALTY = 30;
+        const RECOMMENDATION_CONFIG = {
+          baseScore: 60,
+          loadPenalty: 7,
+          secondaryPenaltyWeight: 0.15,
+          primaryRecoveryPeakWeight: 0.75,
+          hardBasePenalty: 18,
+          broadRecentPenalty: 10,
+          hardRecentPenalty: 20,
+          balancedStartBonus: 25,
+          longBreakDays: 10,
+          unknownNeglectBonus: 20,
+          minimumMeaningfulRatio: 0.25,
+          minimumStreakRatio: 0.5,
+          maxStreak: 3,
+        };
+        // ==================== RECOMMENDATION LOGIC (NO UI / STORAGE WRITES) ====================
+        function calendarDayNumber(date) {
+          if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return NaN;
+          const [year, month, day] = date.split("-").map(Number);
+          // UTC is only used to count LOCAL calendar dates; DST never creates 23h days.
+          const utc = new Date(0);
+          utc.setUTCFullYear(year, month - 1, day);
+          utc.setUTCHours(0, 0, 0, 0);
+          return utc.getTime() / 86400000;
+        }
+        function getDaysSince(date, today = localDate()) {
+          return calendarDayNumber(today) - calendarDayNumber(date);
+        }
+        function getSessionCompletionRatio(session) {
+          const sets = session.results.flatMap((r) => r.sets);
+          return sets.length
+            ? sets.filter((s) => s.done).length / sets.length
+            : 0;
+        }
+        function getCompletedSessions(sessions, today = localDate()) {
+          return sessions
+            .filter(
+              (s) =>
+                s.status === "completed" &&
+                getDaysSince(s.date, today) >= 0 &&
+                getSessionCompletionRatio(s) > 0,
+            )
+            .slice()
+            .sort(
+              (a, b) =>
+                b.date.localeCompare(a.date) ||
+                (b.completedAt || "").localeCompare(a.completedAt || "") ||
+                a.id.localeCompare(b.id),
+            );
+        }
+        function sessionMetadata(session) {
+          // Never consult a mutable template for old history. Historical results remain intact.
+          return {
+            muscleGroups:
+              session.muscleGroups ||
+              inferMuscleGroups(
+                session.results
+                  .filter((r) => r.sets.some((s) => s.done))
+                  .map((r) => r.exercise),
+              ),
+            intensity: session.intensity || "normal",
+          };
+        }
+        function calculateMuscleLoads(sessions, today = localDate()) {
+          const loads = Object.fromEntries(
+            Object.keys(MUSCLE_GROUPS).map((g) => [g, 0]),
+          );
+          for (const s of sessions) {
+            const age = getDaysSince(s.date, today),
+              decay = LOAD_DECAY[age] || 0;
+            if (!decay) continue;
+            const m = sessionMetadata(s),
+              scale =
+                getSessionCompletionRatio(s) *
+                decay *
+                (m.intensity === "hard" ? HARD_MODE_MULTIPLIER : 1);
+            for (const g of m.muscleGroups.primary)
+              loads[g] += PRIMARY_MUSCLE_WEIGHT * scale;
+            for (const g of m.muscleGroups.secondary)
+              loads[g] += SECONDARY_MUSCLE_WEIGHT * scale;
+          }
+          return loads;
+        }
+        function calculateRecentMuscleStreaks(sessions, today = localDate()) {
+          const streaks = {};
+          const meaningful = sessions.filter(
+            (s) =>
+              getSessionCompletionRatio(s) >=
+              RECOMMENDATION_CONFIG.minimumStreakRatio,
+          );
+          for (const g of Object.keys(MUSCLE_GROUPS)) {
+            let count = 0,
+              decay = 1;
+            for (const s of meaningful) {
+              const age = getDaysSince(s.date, today);
+              if (
+                age >= 7 ||
+                !sessionMetadata(s).muscleGroups.primary.includes(g)
+              )
+                break;
+              count++;
+              decay = Math.min(decay, LOAD_DECAY[age] || 0);
+              if (count >= RECOMMENDATION_CONFIG.maxStreak) break;
+            }
+            streaks[g] = {
+              count,
+              penalty: count >= 2 ? STREAK_PENALTY * (count - 1) * decay : 0,
+            };
+          }
+          return streaks;
+        }
+        function buildRecommendationContext(source, today = localDate()) {
+          const sessions = getCompletedSessions(source.sessions, today),
+            loads = calculateMuscleLoads(sessions, today),
+            streaks = calculateRecentMuscleStreaks(sessions, today);
+          const recovery = {},
+            lastWorked = {};
+          for (const g of Object.keys(MUSCLE_GROUPS)) {
+            recovery[g] = 0;
+            lastWorked[g] = null;
+            for (const s of sessions) {
+              const m = sessionMetadata(s),
+                ratio = getSessionCompletionRatio(s),
+                age = getDaysSince(s.date, today);
+              const involvement = m.muscleGroups.primary.includes(g)
+                ? 1
+                : m.muscleGroups.secondary.includes(g)
+                  ? SECONDARY_MUSCLE_WEIGHT / PRIMARY_MUSCLE_WEIGHT
+                  : 0;
+              if (!involvement) continue;
+              recovery[g] = Math.max(
+                recovery[g],
+                (RECOVERY_PENALTIES[age] || 0) *
+                  involvement *
+                  ratio *
+                  (m.intensity === "hard" ? HARD_MODE_MULTIPLIER : 1),
+              );
+              if (
+                lastWorked[g] === null &&
+                ratio >= RECOMMENDATION_CONFIG.minimumMeaningfulRatio
+              )
+                lastWorked[g] = age;
+            }
+          }
+          const meaningful = sessions.filter(
+            (s) =>
+              getSessionCompletionRatio(s) >=
+              RECOMMENDATION_CONFIG.minimumMeaningfulRatio,
+          );
+          const recentOverall = sessions.reduce(
+            (sum, s) =>
+              sum +
+              (LOAD_DECAY[getDaysSince(s.date, today)] || 0) *
+                getSessionCompletionRatio(s) *
+                (sessionMetadata(s).intensity === "hard"
+                  ? HARD_MODE_MULTIPLIER
+                  : 1),
+            0,
+          );
+          return {
+            today,
+            sessions,
+            loads,
+            streaks,
+            recovery,
+            lastWorked,
+            recentOverall,
+            noHistory: meaningful.length === 0,
+            longBreak:
+              meaningful.length > 0 &&
+              getDaysSince(meaningful[0].date, today) >=
+                RECOMMENDATION_CONFIG.longBreakDays,
+          };
+        }
+        function neglectBonus(days) {
+          if (days === null) return RECOMMENDATION_CONFIG.unknownNeglectBonus;
+          return Object.entries(NEGLECT_BONUSES).reduce(
+            (value, [threshold, bonus]) =>
+              days >= Number(threshold) ? bonus : value,
+            0,
+          );
+        }
+        function calculateTemplateScore(template, context) {
+          const groups = template.muscleGroups || {
+              primary: [],
+              secondary: [],
+            },
+            primary = groups.primary,
+            secondary = groups.secondary;
+          const average = (list, fn) =>
+            list.length
+              ? list.reduce((sum, g) => sum + fn(g), 0) / list.length
+              : 0;
+          const hard = template.intensity === "hard",
+            balanced = ["back", "chest", "legs", "shoulders"].every((g) =>
+              primary.includes(g),
+            );
+          const parts = {
+            base: RECOMMENDATION_CONFIG.baseScore,
+            neglect: average(primary, (g) =>
+              neglectBonus(context.lastWorked[g]),
+            ),
+            recovery:
+              -(
+                RECOMMENDATION_CONFIG.primaryRecoveryPeakWeight *
+                  Math.max(0, ...primary.map((g) => context.recovery[g])) +
+                (1 - RECOMMENDATION_CONFIG.primaryRecoveryPeakWeight) *
+                  average(primary, (g) => context.recovery[g])
+              ) -
+              RECOMMENDATION_CONFIG.secondaryPenaltyWeight *
+                average(secondary, (g) => context.recovery[g]),
+            load:
+              -RECOMMENDATION_CONFIG.loadPenalty *
+              (average(primary, (g) => context.loads[g]) +
+                RECOMMENDATION_CONFIG.secondaryPenaltyWeight *
+                  average(secondary, (g) => context.loads[g])),
+            streak: -Math.max(
+              0,
+              ...primary.map((g) => context.streaks[g].penalty),
+            ),
+            overall:
+              -context.recentOverall *
+              (hard
+                ? RECOMMENDATION_CONFIG.hardRecentPenalty
+                : balanced
+                  ? RECOMMENDATION_CONFIG.broadRecentPenalty
+                  : 0),
+            hard: hard ? -RECOMMENDATION_CONFIG.hardBasePenalty : 0,
+            balanced:
+              balanced && !hard && (context.noHistory || context.longBreak)
+                ? RECOMMENDATION_CONFIG.balancedStartBonus
+                : 0,
+            sunday:
+              hard &&
+              new Date(context.today + "T12:00:00").getDay() === 0 &&
+              context.recentOverall < 0.2
+                ? SUNDAY_HARD_MODE_BONUS
+                : 0,
+            unknown: primary.length ? 0 : -25,
+          };
+          return {
+            templateId: template.id,
+            score:
+              Math.round(
+                Object.values(parts).reduce((a, b) => a + b, 0) * 100,
+              ) / 100,
+            parts,
+          };
+        }
+        function getRecommendationReasons(template, context) {
+          const groups = template.muscleGroups?.primary || [],
+            reasons = [];
+          const balanced = ["back", "chest", "legs", "shoulders"].every((g) =>
+            groups.includes(g),
+          );
+          if (context.noHistory)
+            reasons.push("Henüz yeterli antrenman geçmişi yok.");
+          if (context.longBreak)
+            reasons.push(
+              "Uzun aradan sonra eski antrenman tekrarları puanını düşürmüyor.",
+            );
+          if (
+            (context.noHistory || context.longBreak) &&
+            balanced &&
+            template.intensity !== "hard"
+          )
+            reasons.push("Dengeli bir başlangıç için tüm vücut programı.");
+          const ordered = groups
+            .slice()
+            .sort(
+              (a, b) =>
+                (context.lastWorked[b] ?? Infinity) -
+                  (context.lastWorked[a] ?? Infinity) || a.localeCompare(b),
+            );
+          const neglected = ordered.find(
+            (g) => context.lastWorked[g] === null || context.lastWorked[g] >= 4,
+          );
+          if (!context.noHistory && neglected)
+            reasons.push(
+              context.lastWorked[neglected] === null
+                ? `${MUSCLE_GROUPS[neglected]} için henüz yeterli kayıt yok.`
+                : `${MUSCLE_GROUPS[neglected]} ${context.lastWorked[neglected]} gündür çalışılmadı.`,
+            );
+          const repeated = Object.keys(MUSCLE_GROUPS).find(
+            (g) => context.streaks[g].penalty >= 10 && !groups.includes(g),
+          );
+          if (repeated)
+            reasons.push(
+              `Son ${context.streaks[repeated].count} antrenmanda ${MUSCLE_GROUPS[repeated].toLocaleLowerCase("tr-TR")} ağırlıklı çalıştın.`,
+            );
+          if (groups.length) {
+            const high = groups.find((g) => context.recovery[g] >= 40);
+            if (high)
+              reasons.push(
+                `${MUSCLE_GROUPS[high]} yakın zamanda çalışıldı; bu öneri yalnızca seçenekler arasındaki sıralama.`,
+              );
+            else if (groups.every((g) => context.loads[g] < 2))
+              reasons.push("Bu bölgelerin yakın dönem yükü düşük.");
+          }
+          if (!groups.length)
+            reasons.push(
+              "Kas gruplarını program ayarlarından seçerek öneriyi iyileştirebilirsin.",
+            );
+          return reasons.slice(0, 3);
+        }
+        function getWorkoutRecommendation(
+          source = state,
+          today = localDate(),
+          debug = false,
+        ) {
+          const context = buildRecommendationContext(source, today);
+          const scores = source.templates
+            .filter((t) => t.exercises.length > 0)
+            .map((t) => calculateTemplateScore(t, context))
+            .sort(
+              (a, b) =>
+                b.score - a.score || a.templateId.localeCompare(b.templateId),
+            );
+          if (debug)
+            console.table(
+              scores.map((s) => ({
+                program: source.templates.find((t) => t.id === s.templateId)
+                  .name,
+                score: s.score,
+                ...s.parts,
+              })),
+            );
+          if (!scores.length) return null;
+          const best = scores[0],
+            template = source.templates.find((t) => t.id === best.templateId);
+          return {
+            templateId: best.templateId,
+            score: best.score,
+            reasons: getRecommendationReasons(template, context),
+          };
+        }
+
+        function seedData() {
+          const definitions = [
+            ["row", "Rowing Machine", "🚣", "cardio", 1, null, null],
+            [
+              "pull",
+              "Assisted Pull-up",
+              "🧗",
+              "assisted_weight_reps",
+              3,
+              6,
+              10,
+            ],
+            ["leg", "Leg Press", "🦵", "weight_reps", 3, 8, 12],
+            ["cable", "Seated Cable Row", "🚣", "weight_reps", 3, 8, 12],
+            [
+              "shoulder",
+              "Dumbbell Shoulder Press",
+              "🏋️",
+              "weight_reps",
+              3,
+              8,
+              12,
+            ],
+            [
+              "lateral",
+              "Dumbbell Lateral Raise",
+              "🪽",
+              "weight_reps",
+              3,
+              10,
+              15,
+            ],
+            ["plank", "Plank", "🧱", "duration", 3, null, null],
+            ["hang", "Dead Hang", "✋", "duration", 3, null, null],
+            ["walk", "Eğimli Yürüyüş", "❤️", "cardio", 1, null, null],
+            ["bike", "Bisiklet / Rowing", "🚲", "cardio", 1, null, null],
+            [
+              "rdl",
+              "Dumbbell Romanian Deadlift",
+              "🏋️",
+              "weight_reps",
+              3,
+              8,
+              10,
+            ],
+            ["lat", "Lat Pulldown", "⬇️", "weight_reps", 3, 8, 12],
+            [
+              "incline",
+              "Incline Dumbbell Press",
+              "💪",
+              "weight_reps",
+              3,
+              8,
+              12,
+            ],
+            ["face", "Face Pull", "🎯", "weight_reps", 3, 12, 15],
+            ["push", "Şınav", "🤜", "bodyweight_reps", 3, null, null],
+            ["knee", "Hanging Knee Raise", "🧱", "bodyweight_reps", 3, 8, 15],
+          ];
+          const exercises = definitions.map(
+            ([id, name, icon, type, defaultSets, minReps, maxReps]) => ({
+              id,
+              name,
+              icon,
+              type,
+              defaultSets,
+              minReps,
+              maxReps,
+              notes: "",
+            }),
+          );
+          const entry = (id, target, sets) => {
+            const e = exercises.find((x) => x.id === id);
+            return {
+              id: uid(),
+              exerciseId: id,
+              sets: sets ?? e.defaultSets,
+              target: target ?? `${e.defaultSets} × ${e.minReps}–${e.maxReps}`,
+            };
+          };
+          return upgradeToV2({
+            version: 1,
+            exercises,
+            templates: [
+              {
+                id: "workout-a",
+                name: "Workout A",
+                exercises: [
+                  entry("row", "5 dk hafif ısınma"),
+                  entry("pull"),
+                  entry("leg"),
+                  entry("cable"),
+                  entry("shoulder"),
+                  entry("lateral"),
+                  entry("plank", "3 × 30–60 sn"),
+                  entry("hang", "3 set"),
+                  entry("walk", "15–20 dk"),
+                ],
+              },
+              {
+                id: "workout-b",
+                name: "Workout B",
+                exercises: [
+                  entry("bike", "5 dk hafif"),
+                  entry("pull"),
+                  entry("rdl"),
+                  entry("lat"),
+                  entry("incline"),
+                  entry("face"),
+                  entry("push", "3 set"),
+                  entry("knee"),
+                  entry("row", "4 × 500 m", 4),
+                ],
+              },
+            ],
+            sessions: [],
+            settings: { activeSessionId: null },
+          });
+        }
+        function blankSet() {
+          return {
+            id: uid(),
+            weight: null,
+            assistance: null,
+            reps: null,
+            duration: null,
+            distance: null,
+            done: false,
+          };
+        }
+        function createSession(
+          template,
+          date = localDate(),
+          manual = false,
+          source = state,
+        ) {
+          return {
+            id: uid(),
+            templateId: template.id,
+            templateName: template.name,
+            ...templateMetadata(template, source),
+            date,
+            startedAt: manual ? null : new Date().toISOString(),
+            completedAt: null,
+            status: manual ? "draft" : "active",
+            notes: "",
+            results: template.exercises.map((entry) => ({
+              id: uid(),
+              exerciseId: entry.exerciseId,
+              exercise: clone(
+                source.exercises.find((e) => e.id === entry.exerciseId),
+              ),
+              target: entry.target,
+              notes: "",
+              sets: Array.from({ length: entry.sets }, blankSet),
+            })),
+          };
+        }
+        // ==================== STORAGE ====================
+        function upgradeToV2(input) {
+          const data = clone(input);
+          for (const template of data.templates) {
+            const metadata = templateMetadata(template, data);
+            if (!template.muscleGroups)
+              template.muscleGroups = metadata.muscleGroups;
+            if (!template.intensity) template.intensity = metadata.intensity;
+          }
+          seedAdditionalPrograms(data);
+          data.version = VERSION;
+          return data;
+        }
+        function migrateData(data) {
+          if (![1, VERSION].includes(data?.version))
+            throw Error(
+              `Desteklenmeyen yedek sürümü: ${data?.version ?? "yok"}. Desteklenen sürümler: 1, ${VERSION}.`,
+            );
+          if (data.version === 1) {
+            // Validate the original before any additive migration; never repair by deletion.
+            validateData(data, false);
+            return upgradeToV2(data);
+          }
+          return data;
+        }
+        function validateData(input, migrate = true) {
+          const d = migrate ? migrateData(input) : input;
+          const fail = (message) => {
+            throw Error("Geçersiz Iron Log verisi: " + message);
+          };
+          const str = (x) => typeof x === "string";
+          const num = (x) =>
+            x === null ||
+            (typeof x === "number" && Number.isFinite(x) && x >= 0);
+          const count = (x) => Number.isInteger(x) && x >= 1 && x <= 100;
+          const validDate = (x) =>
+            str(x) &&
+            /^\d{4}-\d{2}-\d{2}$/.test(x) &&
+            localDate(new Date(x + "T12:00:00")) === x;
+          const stamp = (x) =>
+            x === null || (str(x) && Number.isFinite(Date.parse(x)));
+          const unique = (list, label) => {
+            if (!Array.isArray(list)) fail(label + " liste olmalı.");
+            const ids = new Set();
+            for (const x of list) {
+              if (!x || !str(x.id) || !x.id || ids.has(x.id))
+                fail(label + " kimlikleri eksik veya tekrarlı.");
+              ids.add(x.id);
+            }
+          };
+          const exercise = (e) => {
+            if (
+              !e ||
+              !str(e.id) ||
+              !str(e.name) ||
+              !e.name.trim() ||
+              !str(e.icon) ||
+              !Object.hasOwn(TYPES, e.type) ||
+              !count(e.defaultSets) ||
+              !num(e.minReps) ||
+              !num(e.maxReps) ||
+              !str(e.notes)
+            )
+              fail("Hareket alanları hatalı.");
+            if (
+              e.minReps !== null &&
+              e.maxReps !== null &&
+              e.minReps > e.maxReps
+            )
+              fail("Tekrar aralığı hatalı.");
+          };
+          const validateMetadata = (item, required = false) => {
+            if (
+              item.muscleGroups === undefined &&
+              item.intensity === undefined &&
+              !required
+            )
+              return;
+            const groups = item.muscleGroups;
+            if (!groups || !["normal", "hard"].includes(item.intensity))
+              fail("Kas grubu veya yoğunluk bilgisi hatalı.");
+            for (const role of ["primary", "secondary"]) {
+              const values = groups[role];
+              if (
+                !Array.isArray(values) ||
+                values.some((g) => !Object.hasOwn(MUSCLE_GROUPS, g)) ||
+                new Set(values).size !== values.length
+              )
+                fail("Kas grubu seçimi hatalı.");
+            }
+            if (groups.primary.some((g) => groups.secondary.includes(g)))
+              fail("Aynı kas grubu hem ana hem ikincil olamaz.");
+          };
+          unique(d.exercises, "Exercises");
+          unique(d.templates, "Templates");
+          unique(d.sessions, "Sessions");
+          d.exercises.forEach(exercise);
+          for (const t of d.templates) {
+            validateMetadata(t, d.version === VERSION);
+            if (!str(t.name) || !t.name.trim()) fail("Program adı eksik.");
+            unique(t.exercises, "Program hareketleri");
+            for (const e of t.exercises)
+              if (
+                !d.exercises.some((x) => x.id === e.exerciseId) ||
+                !count(e.sets) ||
+                !str(e.target)
+              )
+                fail("Program hareketi veya hedefi hatalı.");
+          }
+          for (const s of d.sessions) {
+            validateMetadata(s);
+            if (
+              !str(s.templateId) ||
+              !str(s.templateName) ||
+              !validDate(s.date) ||
+              !stamp(s.startedAt) ||
+              !stamp(s.completedAt) ||
+              !["active", "completed", "draft"].includes(s.status) ||
+              !str(s.notes)
+            )
+              fail("Antrenman alanları hatalı.");
+            if (s.status === "completed" && !s.completedAt)
+              fail("Tamamlanma zamanı eksik.");
+            unique(s.results, "Sonuçlar");
+            for (const r of s.results) {
+              exercise(r.exercise);
+              if (
+                r.exerciseId !== r.exercise.id ||
+                !str(r.target) ||
+                !str(r.notes)
+              )
+                fail("Snapshot veya not hatalı.");
+              unique(r.sets, "Setler");
+              if (r.sets.length > 100) fail("En fazla 100 set desteklenir.");
+              for (const set of r.sets) {
+                if (
+                  typeof set.done !== "boolean" ||
+                  ![
+                    "weight",
+                    "assistance",
+                    "reps",
+                    "duration",
+                    "distance",
+                  ].every((k) => num(set[k])) ||
+                  (set.reps !== null && !Number.isInteger(set.reps))
+                )
+                  fail("Set değerleri hatalı.");
+              }
+            }
+          }
+          if (
+            !d.settings ||
+            typeof d.settings !== "object" ||
+            Array.isArray(d.settings)
+          )
+            fail("Settings eksik.");
+          if (
+            d.settings.seededPrograms !== undefined &&
+            (!Array.isArray(d.settings.seededPrograms) ||
+              d.settings.seededPrograms.some((id) => typeof id !== "string") ||
+              new Set(d.settings.seededPrograms).size !==
+                d.settings.seededPrograms.length)
+          )
+            fail("Hazır program kayıtları hatalı.");
+          const active = d.sessions.filter((s) => s.status === "active");
+          if (
+            active.length > 1 ||
+            !(
+              d.settings.activeSessionId === null ||
+              str(d.settings.activeSessionId)
+            ) ||
+            (active.length === 1
+              ? active[0].id !== d.settings.activeSessionId
+              : d.settings.activeSessionId !== null)
+          )
+            fail("Aktif antrenman bağlantısı hatalı.");
+          return d;
+        }
+        let storageBlocked = false,
+          loadWarning = "",
+          legacyCount = 0;
+        const Storage = {
+          getState() {
+            try {
+              const raw = localStorage.getItem(STORAGE_KEY);
+              if (raw !== null) {
+                const original = JSON.parse(raw);
+                const loaded = validateData(original);
+                if (original.version !== VERSION) this.saveState(loaded);
+                return loaded;
+              }
+              const fresh = seedData();
+              this.migrateLegacy(fresh);
+              this.saveState(fresh);
+              return fresh;
+            } catch (error) {
+              console.error(error);
+              storageBlocked = true;
+              loadWarning =
+                "Stored data could not be loaded. Kayıtlı veriler yüklenemedi; mevcut verinin üzerine yazılmadı. Data bölümünden ham veriyi indirip geçerli bir yedek yükleyebilirsin.";
+              return {
+                version: VERSION,
+                exercises: [],
+                templates: [],
+                sessions: [],
+                settings: { activeSessionId: null },
+              };
+            }
+          },
+          saveState(data) {
+            try {
+              if (storageBlocked)
+                throw Error("Veri yükleme hatası nedeniyle kayıt engellendi.");
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+              setSaveStatus("Otomatik kaydedildi");
+              document.getElementById("storage-error")?.remove();
+              return true;
+            } catch (error) {
+              console.error(error);
+              setSaveStatus("KAYDEDİLEMEDİ");
+              document.getElementById("warning").innerHTML =
+                '<div id="storage-error" class="notice" role="alert">Veri kaydedilemedi. Tarayıcı depolama iznini / boş alanı kontrol et. Sayfayı kapatmadan JSON yedeği indir.</div>';
+              return false;
+            }
+          },
+          exportData() {
+            return JSON.stringify(state, null, 2);
+          },
+          importData(data) {
+            data = validateData(data);
+            try {
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+              storageBlocked = false;
+              return true;
+            } catch (error) {
+              console.error(error);
+              throw Error(
+                "Yedek kaydedilemedi. Depolama iznini ve boş alanı kontrol et.",
+              );
+            }
+          },
+          rawData() {
+            try {
+              return JSON.stringify(
+                Object.fromEntries(
+                  Object.keys(localStorage)
+                    .filter((k) => k === STORAGE_KEY || /^ironlog_/.test(k))
+                    .map((k) => [k, localStorage.getItem(k)]),
+                ),
+                null,
+                2,
+              );
+            } catch (error) {
+              throw Error("Tarayıcı depolaması okunamadı.");
+            }
+          },
+          migrateLegacy(data) {
+            const keys = Object.keys(localStorage)
+              .filter((k) => /^ironlog_\d{4}-\d{2}-\d{2}_[AB]$/.test(k))
+              .sort();
+            for (const key of keys) {
+              try {
+                const old = JSON.parse(localStorage.getItem(key));
+                if (!old || typeof old !== "object" || !Object.keys(old).length)
+                  continue;
+                const t = data.templates[key.endsWith("_A") ? 0 : 1];
+                const s = createSession(t, key.slice(8, 18), true, data);
+                s.status = old.completedAt ? "completed" : "draft";
+                s.completedAt = old.completedAt || null;
+                s.notes =
+                  "Eski sürümden aktarıldı. Eski süre/mesafe alanlarının birimleri belirsiz olduğu için özgün girişler hareket notlarında korundu.";
+                s.legacySource = clone(old);
+                s.results.forEach((r, i) => {
+                  const v = old[i];
+                  if (!v) return;
+                  r.notes = String(v.note || "");
+                  r.sets.forEach((set, j) => {
+                    const prev = v.sets?.[j];
+                    if (!prev) return;
+                    set.done = !!prev.done;
+                    const n = (x) =>
+                      x !== "" &&
+                      x != null &&
+                      Number.isFinite(Number(x)) &&
+                      Number(x) >= 0
+                        ? Number(x)
+                        : null;
+                    if (
+                      ["duration", "cardio", "distance"].includes(
+                        r.exercise.type,
+                      )
+                    ) {
+                      r.notes += `\nEski set ${j + 1}: alan 1 = ${prev.weight ?? "boş"}, alan 2 = ${prev.reps ?? "boş"}.`;
+                    } else {
+                      set[
+                        r.exercise.type === "assisted_weight_reps"
+                          ? "assistance"
+                          : "weight"
+                      ] = n(prev.weight);
+                      set.reps = n(prev.reps);
+                    }
+                  });
+                });
+                validateData({ ...data, sessions: [s] });
+                data.sessions.push(s);
+                legacyCount++;
+              } catch (error) {
+                console.error("Eski kayıt aktarılamadı:", key, error);
+                loadWarning =
+                  "Bazı eski kayıtlar aktarılamadı. Eski depolama anahtarları korundu; Data bölümünden ham veriyi indirebilirsin.";
+              }
+            }
+          },
+        };
+        function setSaveStatus(message) {
+          const el = document.getElementById("save-status");
+          if (el) el.textContent = message;
+        }
+        let state = Storage.getState();
+        const ui = {
+          page: "today",
+          sessionId: null,
+          editing: false,
+          open: new Set(),
+          templateDraft: null,
+          exerciseId: null,
+        };
+        function persist() {
+          return Storage.saveState(state);
+        }
+        // ==================== SESSION LOGIC ====================
+        function activeSession() {
+          return state.sessions.find(
+            (s) => s.id === state.settings.activeSessionId,
+          );
+        }
+        function currentSession() {
+          return state.sessions.find((s) => s.id === ui.sessionId);
+        }
+        function progress(s) {
+          const sets = s.results.flatMap((r) => r.sets);
+          return {
+            total: sets.length,
+            done: sets.filter((x) => x.done).length,
+            exercises: s.results.filter(
+              (r) => r.sets.length && r.sets.every((x) => x.done),
+            ).length,
+          };
+        }
+        function previousResult(exerciseId, session) {
+          return state.sessions
+            .filter(
+              (s) =>
+                s.status === "completed" &&
+                s.id !== session.id &&
+                (s.date < session.date ||
+                  (s.date === session.date &&
+                    (!session.startedAt ||
+                      s.completedAt <= session.startedAt))),
+            )
+            .sort(
+              (a, b) =>
+                b.date.localeCompare(a.date) ||
+                b.completedAt.localeCompare(a.completedAt),
+            )
+            .map((s) => ({
+              session: s,
+              result: s.results.find(
+                (r) =>
+                  r.exerciseId === exerciseId && r.sets.some((x) => x.done),
+              ),
+            }))
+            .find((x) => x.result);
+        }
+        function formatSet(set, type) {
+          const v = (x) => (x === null ? "—" : x);
+          switch (type) {
+            case "weight_reps":
+              return `${v(set.weight)} kg × ${v(set.reps)} tekrar`;
+            case "assisted_weight_reps":
+              return `${v(set.assistance)} kg destek × ${v(set.reps)} tekrar`;
+            case "bodyweight_reps":
+              return `${v(set.reps)} tekrar`;
+            case "duration":
+              return `${v(set.duration)} sn`;
+            case "distance":
+              return `${v(set.distance)} m`;
+            default:
+              return `${v(set.duration)} sn · ${v(set.distance)} m`;
+          }
+        }
+        function startWorkout(id) {
+          if (activeSession()) {
+            ui.sessionId = activeSession().id;
+            renderWorkout();
+            return;
+          }
+          const t = state.templates.find((t) => t.id === id);
+          if (!t?.exercises.length) {
+            toast("Önce programa hareket ekle.");
+            return;
+          }
+          const s = createSession(t);
+          state.sessions.push(s);
+          state.settings.activeSessionId = s.id;
+          ui.sessionId = s.id;
+          ui.open.add(s.results[0].id);
+          persist();
+          renderWorkout();
+        }
+        function validateVisibleInputs() {
+          const invalid = Array.from(main.querySelectorAll("input")).find(
+            (input) => !input.checkValidity(),
+          );
+          if (!invalid) return true;
+          const card = invalid.closest("details");
+          if (card) card.open = true;
+          invalid.reportValidity();
+          toast("Geçersiz girişi düzelt; bu değer henüz kaydedilmedi.");
+          return false;
+        }
+        async function finishWorkout() {
+          if (!validateVisibleInputs()) return;
+          const s = currentSession(),
+            p = progress(s);
+          if (
+            !(await confirmModal(
+              "Antrenmanı bitir",
+              p.total - p.done
+                ? `${p.total - p.done} set henüz tamamlanmadı. Yine de bitirmek istiyor musun?`
+                : "Antrenman tamamlanıp geçmişe eklenecek. Bitirmek istiyor musun?",
+              "Antrenmanı bitir",
+            ))
+          )
+            return;
+          s.status = "completed";
+          s.completedAt = new Date().toISOString();
+          state.settings.activeSessionId = null;
+          persist();
+          ui.page = "history";
+          ui.editing = false;
+          render();
+          renderSessionDetails(s.id);
+          toast("Antrenman geçmişe eklendi.");
+        }
+        function validateSet(set, type) {
+          const keys = FIELDS[type].map((f) => f[0]);
+          if (type === "cardio") return keys.some((k) => set[k] !== null);
+          return keys.every((k) => set[k] !== null);
+        }
+        // ==================== TEMPLATE LOGIC ====================
+        function defaultTarget(e) {
+          return e.minReps !== null && e.maxReps !== null
+            ? `${e.defaultSets} × ${e.minReps}–${e.maxReps}`
+            : `${e.defaultSets} set`;
+        }
+        function openTemplateEditor(id) {
+          ui.templateDraft = id
+            ? clone(state.templates.find((t) => t.id === id))
+            : {
+                id: uid(),
+                name: "",
+                exercises: [],
+                muscleGroups: { primary: [], secondary: [] },
+                intensity: "normal",
+              };
+          renderTemplateEditor();
+        }
+        function renderTemplateEditor() {
+          const t = ui.templateDraft;
+          showModal(
+            `<h2>Programı düzenle</h2><form id="template-form"><label>Program adı<input name="name" required maxlength="120" value="${esc(t.name)}"></label>${renderTemplateMetadataFields(t)}<div id="template-entries">${t.exercises
+              .map((r, i) => {
+                const e = state.exercises.find((e) => e.id === r.exerciseId);
+                return `<div class="template-entry"><div class="row between"><strong>${esc(e.icon)} ${esc(e.name)}</strong><div class="row"><button type="button" data-action="move-entry" data-index="${i}" data-delta="-1" aria-label="Hareketi yukarı taşı" ${i === 0 ? "disabled" : ""}>↑</button><button type="button" data-action="move-entry" data-index="${i}" data-delta="1" aria-label="Hareketi aşağı taşı" ${i === t.exercises.length - 1 ? "disabled" : ""}>↓</button><button type="button" data-action="remove-entry" data-index="${i}" class="danger" aria-label="Hareketi kaldır">×</button></div></div><div class="form-grid"><label>Set sayısı<input type="number" min="1" max="100" required data-entry="${i}" data-entry-field="sets" value="${r.sets}"></label><label>Hedef<input maxlength="200" data-entry="${i}" data-entry-field="target" value="${esc(r.target)}"></label></div></div>`;
+              })
+              .join(
+                "",
+              )}</div><div class="section-label">HAREKET EKLE</div><div class="row"><select id="exercise-choice" aria-label="Eklenecek hareket">${state.exercises.map((e) => `<option value="${esc(e.id)}">${esc(e.name)}</option>`).join("")}</select><button type="button" data-action="add-entry" ${!state.exercises.length ? "disabled" : ""}>＋ Hareket ekle</button></div><p class="small muted">Program değişiklikleri geçmiş ve aktif antrenmanları etkilemez.</p><div class="actions"><button type="button" data-action="close-modal">İptal</button><button class="primary" type="submit">Programı kaydet</button></div></form>`,
+          );
+        }
+        function openExerciseEditor(id) {
+          ui.exerciseId = id || null;
+          const e = state.exercises.find((e) => e.id === id) || {
+            name: "",
+            icon: "🏋️",
+            type: "weight_reps",
+            defaultSets: 3,
+            minReps: null,
+            maxReps: null,
+            notes: "",
+          };
+          showModal(
+            `<h2>${id ? "Hareketi düzenle" : "Yeni hareket"}</h2><form id="exercise-form" class="stack"><label>Hareket adı<input name="name" required maxlength="120" value="${esc(e.name)}"></label><div class="form-grid"><label>İkon / Emoji<input name="icon" maxlength="20" value="${esc(e.icon)}"></label><label>Varsayılan set<input name="defaultSets" type="number" inputmode="numeric" required min="1" max="100" value="${e.defaultSets}"></label><label class="span-2">Hareket türü<select name="type">${Object.entries(
+              TYPES,
+            )
+              .map(
+                ([k, v]) =>
+                  `<option value="${k}" ${e.type === k ? "selected" : ""}>${v}</option>`,
+              )
+              .join(
+                "",
+              )}</select></label><label>Minimum tekrar<input name="minReps" type="number" min="0" step="1" inputmode="numeric" value="${e.minReps ?? ""}"></label><label>Maksimum tekrar<input name="maxReps" type="number" min="0" step="1" inputmode="numeric" value="${e.maxReps ?? ""}"></label></div><p class="small muted">Süre saniye, mesafe metre cinsindedir. Tekrar aralığı yalnızca tekrar içeren hareketlerde kullanılır.</p><label>Hareket notları<textarea name="notes">${esc(e.notes)}</textarea></label><div class="actions"><button type="button" data-action="close-modal">İptal</button><button class="primary">Hareketi kaydet</button></div></form>`,
+          );
+        }
+        // ==================== HISTORY ====================
+        function openManualSession() {
+          if (!state.templates.some((t) => t.exercises.length)) {
+            toast("Önce en az bir hareket içeren program oluştur.");
+            return;
+          }
+          showModal(
+            `<h2>Geçmişe antrenman ekle</h2><form id="manual-form" class="stack"><label>Tarih<input type="date" name="date" value="${localDate()}" required></label><label>Program<select name="template">${state.templates
+              .filter((t) => t.exercises.length)
+              .map(
+                (t) => `<option value="${esc(t.id)}">${esc(t.name)}</option>`,
+              )
+              .join(
+                "",
+              )}</select></label><p class="small muted">Sonuçları girdikten sonra “Geçmişe kaydet” ile tamamla. Başlangıç saati bilinmiyorsa boş bırakabilirsin.</p><div class="actions"><button type="button" data-action="close-modal">İptal</button><button class="primary">Sonuçları gir</button></div></form>`,
+          );
+        }
+        function renderSessionDetails(id) {
+          ui.sessionId = id;
+          const s = currentSession();
+          if (!s) {
+            renderHistory();
+            return;
+          }
+          const edit = ui.editing || s.status === "draft";
+          ui.editing = edit;
+          const p = progress(s);
+          main.innerHTML = `<div class="head"><div><div class="eyebrow">${s.status === "draft" ? "MANUEL KAYIT · TASLAK" : "ANTRENMAN GEÇMİŞİ"}</div><h2>${esc(s.templateName)}</h2><p class="muted">${dateLabel(s.date)}</p></div><button data-action="back-history">← Geri</button></div><div class="card stack"><div class="row between"><span>${p.exercises}/${s.results.length} hareket · ${p.done}/${p.total} set</span><span class="badge">${s.status === "draft" ? "Taslak" : "Tamamlandı"}</span></div>${edit ? `<div class="form-grid"><label>Tarih<input data-session-field="date" type="date" required value="${s.date}"></label><label>Başlangıç saati<input data-session-time="startedAt" type="time" value="${s.startedAt ? localTime(s.startedAt) : ""}"></label><label>Bitiş saati<input data-session-time="completedAt" type="time" value="${s.completedAt ? localTime(s.completedAt) : ""}"></label></div>` : `<p class="small muted">Başlangıç: ${timeLabel(s.startedAt)} · Bitiş: ${timeLabel(s.completedAt)}</p>`}<div class="row">${!edit ? '<button data-action="edit-history">Düzenle</button>' : ""}<button data-action="delete-session" class="danger">Kaydı sil</button></div></div><div class="stack" style="margin-top:16px">${s.results.map((r) => renderExerciseCard(r, s, edit, false)).join("")}</div><div class="card note">${edit ? `<label>Genel antrenman notu<textarea data-session-field="notes">${esc(s.notes)}</textarea></label>` : `<div class="section-label">GENEL NOT</div><p class="preline">${esc(s.notes || "Not eklenmedi.")}</p>`}</div>${edit ? `<button class="primary wide note" data-action="save-history">${s.status === "draft" ? "Geçmişe kaydet" : "Düzenlemeyi bitir"}</button><p class="small muted">Değişiklikler otomatik kaydedilir.</p>` : ""}`;
+          markNavigation();
+        }
+        function localTime(iso) {
+          const d = new Date(iso);
+          return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+        }
+        // ==================== IMPORT EXPORT ====================
+        function download(name, content, type) {
+          const url = URL.createObjectURL(new Blob([content], { type }));
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = name;
+          document.body.append(a);
+          a.click();
+          a.remove();
+          setTimeout(() => URL.revokeObjectURL(url), 30000);
+        }
+        function coachReport(from, to) {
+          const sessions = state.sessions
+            .filter(
+              (s) =>
+                s.status === "completed" &&
+                (!from || s.date >= from) &&
+                (!to || s.date <= to),
+            )
+            .sort(
+              (a, b) =>
+                a.date.localeCompare(b.date) ||
+                (a.completedAt || "").localeCompare(b.completedAt || ""),
+            );
+          const lines = [
+            "IRON LOG TRAINING REPORT",
+            `Date range: ${from || sessions[0]?.date || "—"} - ${to || sessions.at(-1)?.date || "—"}`,
+            `Workout sessions: ${sessions.length}`,
+            "Units: kg; assistance = destek (daha düşük destek = daha az yardım); duration = seconds; distance = meters.",
+            "✓ = completed; ○ = incomplete",
+            "",
+          ];
+          const grouped = new Map();
+          sessions.forEach((s) =>
+            s.results.forEach((r) => {
+              if (!grouped.has(r.exerciseId)) grouped.set(r.exerciseId, []);
+              grouped.get(r.exerciseId).push({ s, r });
+            }),
+          );
+          for (const list of grouped.values()) {
+            lines.push(list.at(-1).r.exercise.name.toUpperCase(), "");
+            for (const { s, r } of list) {
+              lines.push(
+                `${s.date} | ${s.templateName}`,
+                `Exercise: ${r.exercise.name} | Type: ${r.exercise.type}`,
+                `Target: ${r.target}`,
+                ...r.sets.map(
+                  (set, i) =>
+                    `${set.done ? "✓" : "○"} Set ${i + 1}: ${formatSet(set, r.exercise.type)}`,
+                ),
+              );
+              if (r.notes) lines.push("Notes: " + r.notes);
+              lines.push("");
+            }
+          }
+          lines.push("WORKOUT NOTES");
+          sessions.forEach((s) =>
+            lines.push(
+              `${s.date} | ${s.templateName}`,
+              s.notes || "(No workout note)",
+              "",
+            ),
+          );
+          return lines.join("\n");
+        }
+        async function importBackup(file) {
+          if (!file) return;
+          try {
+            if (file.size > 20 * 1024 * 1024)
+              throw Error(
+                "Dosya çok büyük. En fazla 20 MB yedek yüklenebilir.",
+              );
+            const incoming = validateData(JSON.parse(await file.text()));
+            if (
+              !(await confirmModal(
+                "Tüm verileri değiştir",
+                `Bu yedekte ${incoming.sessions.length} antrenman, ${incoming.templates.length} program var. Mevcut tüm programlar, hareketler ve antrenmanlar (aktif kayıt dahil) değiştirilecek. Bu işlem geri alınamaz. Önce mevcut JSON yedeğini indirdiğinden emin ol.`,
+                "Tüm verileri değiştir",
+                true,
+              ))
+            )
+              return;
+            Storage.importData(incoming);
+            state = incoming;
+            ui.sessionId = null;
+            ui.open.clear();
+            ui.editing = false;
+            loadWarning = "";
+            document.getElementById("warning").innerHTML = "";
+            render();
+            toast("Yedek yüklendi.");
+          } catch (error) {
+            console.error(error);
+            showModal(
+              `<h2>Yedek yüklenemedi</h2><p>${esc(error.message)}</p><div class="actions"><button data-action="close-modal">Kapat</button></div>`,
+            );
+          }
+        }
+        // ==================== UI ====================
+        const main = document.getElementById("main"),
+          modal = document.getElementById("modal");
+        function showModal(html) {
+          modal.innerHTML = html;
+          if (!modal.open) modal.showModal();
+        }
+        function closeModal() {
+          modal.close();
+        }
+        function confirmModal(
+          title,
+          message,
+          label = "Onayla",
+          danger = false,
+        ) {
+          return new Promise((resolve) => {
+            showModal(
+              `<h2>${esc(title)}</h2><p>${esc(message)}</p><div class="actions"><button id="confirm-no" autofocus>Vazgeç</button><button id="confirm-yes" class="${danger ? "danger" : "primary"}">${esc(label)}</button></div>`,
+            );
+            let resolved = false;
+            const done = (value) => {
+              if (resolved) return;
+              resolved = true;
+              modal.removeEventListener("cancel", cancel);
+              modal.removeEventListener("close", closed);
+              closeModal();
+              resolve(value);
+            };
+            const cancel = (e) => {
+              e.preventDefault();
+              done(false);
+            };
+            const closed = () => done(false);
+            modal.addEventListener("cancel", cancel);
+            modal.addEventListener("close", closed);
+            document.getElementById("confirm-no").onclick = () => done(false);
+            document.getElementById("confirm-yes").onclick = () => done(true);
+          });
+        }
+        let toastTimer;
+        function toast(message) {
+          document.getElementById("toast").textContent = message;
+          clearTimeout(toastTimer);
+          toastTimer = setTimeout(
+            () => (document.getElementById("toast").textContent = ""),
+            4000,
+          );
+        }
+        function markNavigation() {
+          document.querySelectorAll("[data-nav]").forEach((b) => {
+            b.classList.toggle("active", b.dataset.nav === ui.page);
+            if (b.dataset.nav === ui.page)
+              b.setAttribute("aria-current", "page");
+            else b.removeAttribute("aria-current");
+          });
+        }
+        function empty(title, description) {
+          return `<div class="empty"><div class="symbol">＋</div><h3>${title}</h3><p class="muted">${description}</p></div>`;
+        }
+        function render() {
+          markNavigation();
+          ({
+            today: renderHome,
+            history: renderHistory,
+            templates: renderTemplates,
+            exercises: renderExercises,
+            data: renderDataPage,
+          })[ui.page]();
+        }
+
+        function renderTemplateMetadataFields(template) {
+          return `<div class="metadata-editor"><p class="small muted">Öneriler için kas gruplarını seç. Bu bilgiler yeni antrenmanlara kopyalanır; geçmiş değişmez.</p>${[
+            "primary",
+            "secondary",
+          ]
+            .map(
+              (role) =>
+                `<fieldset><legend>${role === "primary" ? "Ana kas grupları" : "İkincil kas grupları"}</legend><div class="muscle-options">${Object.entries(
+                  MUSCLE_GROUPS,
+                )
+                  .map(
+                    ([key, label]) =>
+                      `<label><input type="checkbox" data-muscle-role="${role}" value="${key}" ${template.muscleGroups[role].includes(key) ? "checked" : ""}>${label}</label>`,
+                  )
+                  .join("")}</div></fieldset>`,
+            )
+            .join(
+              "",
+            )}<label>Yoğunluk<select name="intensity"><option value="normal" ${template.intensity === "normal" ? "selected" : ""}>Normal</option><option value="hard" ${template.intensity === "hard" ? "selected" : ""}>Yüksek · Hard</option></select></label></div>`;
+        }
+        function renderRecommendationCard() {
+          const recommendation = getWorkoutRecommendation();
+          if (!recommendation) return "";
+          const template = state.templates.find(
+            (t) => t.id === recommendation.templateId,
+          );
+          return `<section class="card recommendation" aria-labelledby="recommendation-title"><div class="eyebrow">💡 BUGÜNKÜ ANTRENMAN ÖNERİSİ</div><h2 id="recommendation-title">${esc(template.icon || "🏋️")} ${esc(template.name)}</h2><ul>${recommendation.reasons.map((reason) => `<li>${esc(reason)}</li>`).join("")}</ul><button class="primary wide" data-action="start" data-id="${esc(template.id)}">ÖNERİLEN ANTRENMANI BAŞLAT →</button><p class="small muted">Diğer programları da aşağıdan seçebilirsin.</p></section>`;
+        }
+
+        function renderHome() {
+          const active = activeSession();
+          if (active) {
+            ui.sessionId = active.id;
+            renderWorkout();
+            return;
+          }
+          main.innerHTML = `<div class="head"><div><div class="eyebrow">${esc(dateLabel(localDate()))}</div><h2>Bugün kendine yatırım yap.</h2><p class="muted">Programını seç. İlk setle başla.</p></div></div>${renderRecommendationCard()}<div class="grid">${state.templates
+            .map(
+              (t, i) =>
+                `<article class="card template-card"><div class="row between"><div class="letter">${esc(t.name === "Workout A" ? "A" : t.name === "Workout B" ? "B" : String(i + 1).padStart(2, "0"))}</div><span class="badge">${t.exercises.reduce((n, e) => n + e.sets, 0)} SET</span></div><div><h3>${esc(t.name)}</h3><div class="small muted">${t.exercises.length} hareket</div></div><p class="small muted">${esc(
+                  t.exercises
+                    .slice(0, 4)
+                    .map(
+                      (r) =>
+                        state.exercises.find((e) => e.id === r.exerciseId)
+                          ?.name,
+                    )
+                    .join(" · "),
+                )}${t.exercises.length > 4 ? "…" : ""}</p><button class="primary wide" data-action="start" data-id="${esc(t.id)}" ${storageBlocked ? "disabled" : ""}>ANTRENMANA BAŞLA →</button></article>`,
+            )
+            .join(
+              "",
+            )}</div>${!state.templates.length ? empty("Programın henüz yok", "Templates bölümünden bir program oluştur.") : ""}<p class="footer-note">● Her set otomatik kaydedilir. Kaldığın yerden devam edebilirsin.</p>`;
+        }
+        function progressHTML(s) {
+          const p = progress(s),
+            pct = p.total ? Math.round((p.done / p.total) * 100) : 0;
+          return `<div class="row between"><strong>Bugünkü ilerleme</strong><span>${p.done} / ${p.total} set · <b class="check">%${pct}</b></span></div><div class="progress" role="progressbar" aria-label="Tamamlanan setler" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"><div style="width:${pct}%"></div></div>`;
+        }
+        function renderWorkout() {
+          const s = currentSession();
+          if (!s) return renderHome();
+          ui.page = "today";
+          main.innerHTML = `<div class="head"><div><div class="eyebrow">ANTRENMAN DEVAM EDİYOR</div><h2>${esc(s.templateName)}</h2><p class="muted small">${dateLabel(s.date)} · Başlangıç ${timeLabel(s.startedAt)}</p></div><span class="badge">AKTİF</span></div><div class="progress-card" id="workout-progress">${progressHTML(s)}</div><div class="stack">${s.results.map((r) => renderExerciseCard(r, s, true, true)).join("")}</div><div class="card note"><label>Genel antrenman notu<textarea data-session-field="notes" placeholder="Bugün nasıl hissettin?">${esc(s.notes)}</textarea></label></div><button data-action="finish" class="primary wide note">ANTRENMANI BİTİR</button><p class="footer-note">Kaydın bu tarayıcıda saklanır. Düzenli yedek almayı unutma.</p>`;
+          markNavigation();
+        }
+        function renderExerciseCard(r, s, edit, previous) {
+          const done = r.sets.length > 0 && r.sets.every((x) => x.done);
+          const prev = previous ? previousResult(r.exerciseId, s) : null;
+          return `<details class="exercise" data-result="${esc(r.id)}" ${ui.open.has(r.id) || !previous ? "open" : ""}><summary><span class="icon">${esc(r.exercise.icon)}</span><span class="exercise-title"><strong>${esc(r.exercise.name)} <span data-card-check class="check">${done ? "✓" : ""}</span></strong><span class="small muted">${esc(r.target)}</span></span></summary><div class="exercise-body"><div class="section-label">HEDEF</div><p class="small">${esc(r.target)}</p>${r.exercise.notes ? `<p class="small muted preline">${esc(r.exercise.notes)}</p>` : ""}${r.exercise.type === "assisted_weight_reps" ? '<p class="small check">Destek: daha düşük kg, daha az yardım.</p>' : ""}${
+            previous
+              ? `<div class="section-label">SON ANTRENMAN ${prev ? "· " + esc(dateLabel(prev.session.date)) : ""}</div><div class="previous">${
+                  prev
+                    ? prev.result.sets
+                        .filter((x) => x.done)
+                        .map(
+                          (x) =>
+                            `<p>${esc(formatSet(x, prev.result.exercise.type))}</p>`,
+                        )
+                        .join("") +
+                      (prev.result.notes
+                        ? `<p class="muted preline">${esc(prev.result.notes)}</p>`
+                        : "")
+                    : "Henüz geçmiş kayıt yok."
+                }</div>`
+              : ""
+          }<div class="section-label">${previous ? "BUGÜN" : "SET SONUÇLARI"}</div>${r.sets.map((set, i) => (edit ? renderSetRow(r, set, i, !previous) : `<div class="readonly-set"><span class="${set.done ? "check" : "muted"}">${set.done ? "✓" : "○"} Set ${i + 1}</span> · ${esc(formatSet(set, r.exercise.type))}</div>`)).join("")}${edit ? `<button data-action="add-set" data-result-id="${esc(r.id)}" class="small">＋ Set ekle</button><label class="note">Hareket notu<textarea data-result-note="${esc(r.id)}" placeholder="Form, zorluk, bir sonraki set…">${esc(r.notes)}</textarea></label>` : `<p class="muted small preline">${esc(r.notes || "Not eklenmedi.")}</p>`}</div></details>`;
+        }
+        function renderSetRow(r, set, index, history) {
+          return `<div class="set-row ${set.done ? "done" : ""} ${history ? "history-edit" : ""}" data-set-row="${esc(set.id)}"><span class="set-number">${String(index + 1).padStart(2, "0")}</span><div class="set-fields">${FIELDS[r.exercise.type].map(([key, label]) => `<label>${label}<input type="number" inputmode="${key === "reps" ? "numeric" : "decimal"}" min="0" step="${key === "reps" ? "1" : "any"}" aria-label="${esc(r.exercise.name)} set ${index + 1} ${label}" data-result-id="${esc(r.id)}" data-set-id="${esc(set.id)}" data-set-field="${key}" value="${set[key] ?? ""}"></label>`).join("")}</div><button class="tick" data-action="toggle-set" data-result-id="${esc(r.id)}" data-set-id="${esc(set.id)}" aria-label="Set ${index + 1} ${set.done ? "tamamlanmasını geri al" : "tamamla"}" aria-pressed="${set.done}">✓</button>${history ? `<button class="remove-set" data-action="remove-set" data-result-id="${esc(r.id)}" data-set-id="${esc(set.id)}" aria-label="Set ${index + 1} sil">×</button>` : ""}</div>`;
+        }
+        function renderHistory() {
+          const all = state.sessions
+            .filter((s) => s.status !== "active")
+            .sort(
+              (a, b) =>
+                b.date.localeCompare(a.date) ||
+                (b.completedAt || "").localeCompare(a.completedAt || ""),
+            );
+          main.innerHTML = `<div class="head"><div><div class="eyebrow">HER SET BİR ADIM</div><h2>Geçmiş</h2><p class="muted">${all.filter((s) => s.status === "completed").length} tamamlanan antrenman</p></div><button class="primary" data-action="manual">＋ Ekle</button></div><div class="stack">${
+            all.length
+              ? all
+                  .map((s) => {
+                    const p = progress(s);
+                    return `<button class="history-item" data-action="session" data-id="${esc(s.id)}"><div class="row between"><span class="small muted">${dateLabel(s.date)}</span><span class="check">${s.status === "draft" ? "Taslak" : "↗"}</span></div><strong>${esc(s.templateName)}</strong><div class="small muted">${p.exercises}/${s.results.length} hareket · ${p.done} tamamlanan set</div></button>`;
+                  })
+                  .join("")
+              : empty(
+                  "İlk antrenmanın seni bekliyor",
+                  "Bitirdiğin antrenmanlar burada görünecek. Geçmiş bir antrenmanı da elle ekleyebilirsin.",
+                )
+          }</div>`;
+        }
+        function renderTemplates() {
+          main.innerHTML = `<div class="head"><div><div class="eyebrow">PLANINI OLUŞTUR</div><h2>Programlar</h2></div><button class="primary" data-action="new-template">＋ Yeni</button></div><div class="stack">${state.templates.map((t) => `<article class="card"><h3>${esc(t.name)}</h3><p class="small muted">${t.exercises.length} hareket · ${t.exercises.reduce((n, e) => n + e.sets, 0)} set</p><p class="small muted">${esc(t.exercises.map((r) => state.exercises.find((e) => e.id === r.exerciseId)?.name).join(" · "))}</p><div class="actions"><button data-action="edit-template" data-id="${esc(t.id)}">Düzenle / Adlandır</button><button class="danger" data-action="delete-template" data-id="${esc(t.id)}">Sil</button></div></article>`).join("") || empty("Henüz program yok", "Yeni bir program oluştur ve kütüphaneden hareket ekle.")}</div>`;
+        }
+        function renderExercises() {
+          main.innerHTML = `<div class="head"><div><div class="eyebrow">HAREKET KÜTÜPHANESİ</div><h2>Hareketler</h2></div><button class="primary" data-action="new-exercise">＋ Yeni</button></div><div class="stack">${state.exercises.map((e) => `<article class="card"><div class="row"><span class="icon">${esc(e.icon)}</span><div><h3>${esc(e.name)}</h3><p class="small muted">${esc(TYPES[e.type])} · ${e.defaultSets} set</p></div></div><div class="actions"><button data-action="edit-exercise" data-id="${esc(e.id)}">Düzenle</button><button class="danger" data-action="delete-exercise" data-id="${esc(e.id)}">Sil</button></div></article>`).join("") || empty("Hareket kütüphanen boş", "İlk hareketini ekle.")}</div>`;
+        }
+        function renderDataPage() {
+          main.innerHTML = `<div class="head"><div><div class="eyebrow">VERİLERİN SENDE</div><h2>Yedek ve dışa aktarım</h2><p class="muted">Bu tarayıcıda, bu cihazda.</p></div></div><div class="stack"><section class="card"><h3>Full backup JSON</h3><p class="muted small">Hareketler, programlar, geçmiş, aktif antrenman ve ayarlar. Tarayıcı verilerini temizlemeden önce yedek al.</p><button class="primary" data-action="export-json">↓ JSON yedeğini indir</button><p class="small muted">${state.sessions.length} kayıt · ${state.templates.length} program · Sürüm ${VERSION}</p></section><section class="card"><h3>Coach export</h3><p class="muted small">Hareket bazında tarih sıralı sonuçlar ve notlar. Tamamlanmamış setler ayrıca işaretlenir.</p><form id="coach-form"><div class="form-grid"><label>Başlangıç (isteğe bağlı)<input type="date" name="from"></label><label>Bitiş (isteğe bağlı)<input type="date" name="to"></label></div><button class="note" type="submit">↓ Antrenör raporu · TXT</button></form></section><section class="card"><h3>Import backup</h3><p class="muted small">Geçerli bir IRON LOG v1 veya v2 JSON yedeği seç. V1 yedekleri geçmiş korunarak güncellenir. İçeriği doğrulandıktan sonra tüm mevcut veriyi değiştirmek için onayın istenir.</p><label>JSON yedek dosyası<input id="import-file" type="file" accept=".json,application/json"></label></section><section class="card"><h3>Eski sürüm / kurtarma</h3><p class="muted small">Eski ironlog kayıtları ilk açılışta aktarılır. Tamamlanmamış kayıtlar taslak olarak görünür. Belirsiz süre ve mesafe girişleri notlarda özgün haliyle tutulur. Eski anahtarlar silinmez.</p><button data-action="export-raw">Ham depolamayı indir</button></section></div>`;
+        }
+        // ==================== EVENT HANDLERS ====================
+        function rerenderSession() {
+          if (ui.page === "today") renderWorkout();
+          else renderSessionDetails(ui.sessionId);
+        }
+        document.addEventListener(
+          "toggle",
+          (event) => {
+            if (event.target.matches?.("details[data-result]")) {
+              const id = event.target.dataset.result;
+              if (event.target.open) ui.open.add(id);
+              else ui.open.delete(id);
+            }
+          },
+          true,
+        );
+        document.addEventListener("input", (event) => {
+          const el = event.target,
+            d = el.dataset,
+            s = currentSession();
+          if (d.setField && s) {
+            const r = s.results.find((r) => r.id === d.resultId),
+              set = r.sets.find((x) => x.id === d.setId);
+            if (!el.validity.valid) {
+              el.setAttribute("aria-invalid", "true");
+              setSaveStatus("Geçersiz giriş · kaydedilmedi");
+              return;
+            }
+            el.removeAttribute("aria-invalid");
+            set[d.setField] = el.value === "" ? null : Number(el.value);
+            if (set.done && !validateSet(set, r.exercise.type)) {
+              set.done = false;
+              const row = el.closest(".set-row");
+              row.classList.remove("done");
+              row.querySelector(".tick").setAttribute("aria-pressed", "false");
+            }
+            persist();
+            updateWorkoutProgress();
+            return;
+          }
+          if (d.resultNote && s) {
+            s.results.find((r) => r.id === d.resultNote).notes = el.value;
+            persist();
+          }
+          if (d.sessionField && s) {
+            if (d.sessionField === "date") {
+              if (!el.value || !el.validity.valid) return;
+              for (const k of ["startedAt", "completedAt"])
+                if (s[k])
+                  s[k] = new Date(
+                    `${el.value}T${localTime(s[k])}`,
+                  ).toISOString();
+            }
+            s[d.sessionField] = el.value;
+            persist();
+          }
+          if (d.sessionTime && s) {
+            if (!el.value) {
+              if (d.sessionTime === "startedAt" || s.status === "draft")
+                s[d.sessionTime] = null;
+              else {
+                el.value = localTime(s.completedAt);
+                toast("Tamamlanan kaydın bitiş saati boş olamaz.");
+                return;
+              }
+            } else
+              s[d.sessionTime] = new Date(
+                `${s.date}T${el.value}`,
+              ).toISOString();
+            persist();
+          }
+          if (el.closest("#template-form")) {
+            if (el.name === "name") ui.templateDraft.name = el.value;
+            if (el.name === "intensity") ui.templateDraft.intensity = el.value;
+            if (d.muscleRole) {
+              const groups = ui.templateDraft.muscleGroups;
+              groups[d.muscleRole] = Array.from(
+                el
+                  .closest("form")
+                  .querySelectorAll(
+                    `[data-muscle-role="${d.muscleRole}"]:checked`,
+                  ),
+              ).map((input) => input.value);
+              if (el.checked) {
+                const other =
+                  d.muscleRole === "primary" ? "secondary" : "primary";
+                groups[other] = groups[other].filter((g) => g !== el.value);
+                el
+                  .closest("form")
+                  .querySelector(
+                    `[data-muscle-role="${other}"][value="${el.value}"]`,
+                  ).checked = false;
+              }
+            }
+            if (d.entry !== undefined) {
+              const entry = ui.templateDraft.exercises[Number(d.entry)];
+              entry[d.entryField] =
+                d.entryField === "sets" ? Number(el.value) : el.value;
+            }
+          }
+        });
+        function updateWorkoutProgress() {
+          const s = currentSession();
+          if (!s) return;
+          const p = document.getElementById("workout-progress");
+          if (p) p.innerHTML = progressHTML(s);
+          document.querySelectorAll("details[data-result]").forEach((card) => {
+            const r = s.results.find((r) => r.id === card.dataset.result);
+            if (r)
+              card.querySelector("[data-card-check]").textContent =
+                r.sets.length && r.sets.every((x) => x.done) ? "✓" : "";
+          });
+        }
+        document.addEventListener("change", (e) => {
+          if (e.target.id === "import-file") importBackup(e.target.files[0]);
+        });
+        document.addEventListener("click", async (event) => {
+          const b = event.target.closest("button");
+          if (!b) return;
+          if (b.dataset.nav) {
+            ui.page = b.dataset.nav;
+            ui.editing = false;
+            ui.sessionId = null;
+            render();
+            window.scrollTo(0, 0);
+            return;
+          }
+          const a = b.dataset.action,
+            id = b.dataset.id;
+          if (!a) return;
+          const s = currentSession();
+          switch (a) {
+            case "start":
+              startWorkout(id);
+              break;
+            case "finish":
+              await finishWorkout();
+              break;
+            case "close-modal":
+              closeModal();
+              break;
+            case "toggle-set": {
+              const r = s.results.find((x) => x.id === b.dataset.resultId),
+                set = r.sets.find((x) => x.id === b.dataset.setId);
+              const row = b.closest(".set-row");
+              if (
+                !set.done &&
+                (!validateSet(set, r.exercise.type) ||
+                  Array.from(row.querySelectorAll("input")).some(
+                    (x) => !x.validity.valid,
+                  ))
+              ) {
+                toast(
+                  "Seti tamamlamak için geçerli sonuç gir. Kardiyoda süre veya mesafe yeterli.",
+                );
+                return;
+              }
+              set.done = !set.done;
+              persist();
+              row.classList.toggle("done", set.done);
+              b.setAttribute("aria-pressed", String(set.done));
+              b.setAttribute(
+                "aria-label",
+                set.done ? "Set tamamlanmasını geri al" : "Seti tamamla",
+              );
+              updateWorkoutProgress();
+              break;
+            }
+            case "add-set": {
+              const r = s.results.find((x) => x.id === b.dataset.resultId);
+              if (r.sets.length >= 100) {
+                toast("En fazla 100 set eklenebilir.");
+                return;
+              }
+              r.sets.push(blankSet());
+              persist();
+              rerenderSession();
+              break;
+            }
+            case "remove-set": {
+              const r = s.results.find((x) => x.id === b.dataset.resultId);
+              if (
+                !(await confirmModal(
+                  "Seti sil",
+                  "Bu set ve girdiğin sonuçları silinsin mi?",
+                  "Seti sil",
+                  true,
+                ))
+              )
+                return;
+              r.sets = r.sets.filter((x) => x.id !== b.dataset.setId);
+              persist();
+              rerenderSession();
+              break;
+            }
+            case "manual":
+              openManualSession();
+              break;
+            case "session":
+              ui.editing = false;
+              renderSessionDetails(id);
+              break;
+            case "back-history":
+              ui.sessionId = null;
+              ui.editing = false;
+              renderHistory();
+              break;
+            case "edit-history":
+              ui.editing = true;
+              renderSessionDetails(s.id);
+              break;
+            case "save-history":
+              if (!validateVisibleInputs()) return;
+              if (s.status === "draft") {
+                s.status = "completed";
+                s.completedAt =
+                  s.completedAt ||
+                  new Date(
+                    `${s.date}T${localTime(new Date().toISOString())}`,
+                  ).toISOString();
+              }
+              persist();
+              ui.editing = false;
+              renderSessionDetails(s.id);
+              toast("Geçmiş kaydı kaydedildi.");
+              break;
+            case "delete-session":
+              if (
+                await confirmModal(
+                  "Antrenmanı sil",
+                  "Bu antrenman kaydı kalıcı olarak silinecek.",
+                  "Kaydı sil",
+                  true,
+                )
+              ) {
+                state.sessions = state.sessions.filter((x) => x.id !== s.id);
+                persist();
+                ui.sessionId = null;
+                ui.editing = false;
+                renderHistory();
+              }
+              break;
+            case "new-template":
+              openTemplateEditor();
+              break;
+            case "edit-template":
+              openTemplateEditor(id);
+              break;
+            case "delete-template":
+              if (
+                await confirmModal(
+                  "Programı sil",
+                  "Program silinecek. Geçmiş ve aktif antrenman kayıtları korunacak.",
+                  "Programı sil",
+                  true,
+                )
+              ) {
+                state.templates = state.templates.filter((x) => x.id !== id);
+                persist();
+                renderTemplates();
+              }
+              break;
+            case "add-entry": {
+              const e = state.exercises.find(
+                (x) =>
+                  x.id === document.getElementById("exercise-choice").value,
+              );
+              if (!e) return;
+              ui.templateDraft.exercises.push({
+                id: uid(),
+                exerciseId: e.id,
+                sets: e.defaultSets,
+                target: defaultTarget(e),
+              });
+              renderTemplateEditor();
+              break;
+            }
+            case "remove-entry":
+              ui.templateDraft.exercises.splice(Number(b.dataset.index), 1);
+              renderTemplateEditor();
+              break;
+            case "move-entry": {
+              const i = Number(b.dataset.index),
+                j = i + Number(b.dataset.delta),
+                list = ui.templateDraft.exercises;
+              [list[i], list[j]] = [list[j], list[i]];
+              renderTemplateEditor();
+              break;
+            }
+            case "new-exercise":
+              openExerciseEditor();
+              break;
+            case "edit-exercise":
+              openExerciseEditor(id);
+              break;
+            case "delete-exercise": {
+              const count = state.templates.filter((t) =>
+                t.exercises.some((r) => r.exerciseId === id),
+              ).length;
+              if (
+                await confirmModal(
+                  "Hareketi sil",
+                  `Hareket kütüphaneden ve kullanıldığı ${count} programdan kaldırılacak. Geçmiş ve aktif antrenman snapshot’ları korunacak.`,
+                  "Hareketi sil",
+                  true,
+                )
+              ) {
+                state.exercises = state.exercises.filter((e) => e.id !== id);
+                state.templates.forEach(
+                  (t) =>
+                    (t.exercises = t.exercises.filter(
+                      (r) => r.exerciseId !== id,
+                    )),
+                );
+                persist();
+                renderExercises();
+              }
+              break;
+            }
+            case "export-json":
+              download(
+                `iron-log-backup-${localDate()}.json`,
+                Storage.exportData(),
+                "application/json",
+              );
+              break;
+            case "export-raw":
+              try {
+                download(
+                  `iron-log-raw-${localDate()}.json`,
+                  Storage.rawData(),
+                  "application/json",
+                );
+              } catch (error) {
+                toast(error.message);
+              }
+              break;
+          }
+        });
+        document.addEventListener("submit", (event) => {
+          event.preventDefault();
+          const form = event.target,
+            f = new FormData(form);
+          switch (form.id) {
+            case "template-form": {
+              const t = ui.templateDraft;
+              t.name = f.get("name").trim();
+              if (
+                !t.name ||
+                t.exercises.some(
+                  (r) =>
+                    !Number.isInteger(r.sets) || r.sets < 1 || r.sets > 100,
+                )
+              ) {
+                toast("Program adı ve 1–100 arasında set sayısı gerekli.");
+                return;
+              }
+              const i = state.templates.findIndex((x) => x.id === t.id);
+              if (i < 0) state.templates.push(clone(t));
+              else state.templates[i] = clone(t);
+              persist();
+              closeModal();
+              renderTemplates();
+              break;
+            }
+            case "exercise-form": {
+              const rep = (n) => (f.get(n) === "" ? null : Number(f.get(n)));
+              const type = f.get("type"),
+                hasReps = FIELDS[type].some(([key]) => key === "reps");
+              const e = {
+                id: ui.exerciseId || uid(),
+                name: f.get("name").trim(),
+                icon: f.get("icon").trim() || "🏋️",
+                type,
+                defaultSets: Number(f.get("defaultSets")),
+                minReps: hasReps ? rep("minReps") : null,
+                maxReps: hasReps ? rep("maxReps") : null,
+                notes: f.get("notes"),
+              };
+              if (
+                !e.name ||
+                (e.minReps !== null &&
+                  e.maxReps !== null &&
+                  e.minReps > e.maxReps)
+              ) {
+                toast("Adı ve tekrar aralığını kontrol et.");
+                return;
+              }
+              const i = state.exercises.findIndex((x) => x.id === e.id);
+              if (i < 0) state.exercises.push(e);
+              else state.exercises[i] = e;
+              persist();
+              closeModal();
+              renderExercises();
+              break;
+            }
+            case "manual-form": {
+              const template = state.templates.find(
+                (t) => t.id === f.get("template"),
+              );
+              const s = createSession(template, f.get("date"), true);
+              state.sessions.push(s);
+              persist();
+              closeModal();
+              ui.page = "history";
+              ui.editing = true;
+              renderSessionDetails(s.id);
+              break;
+            }
+            case "coach-form": {
+              const from = f.get("from"),
+                to = f.get("to");
+              if (from && to && from > to) {
+                toast("Başlangıç tarihi bitişten sonra olamaz.");
+                return;
+              }
+              download(
+                `iron-log-coach-${localDate()}.txt`,
+                coachReport(from, to),
+                "text/plain;charset=utf-8",
+              );
+              break;
+            }
+          }
+        });
+        if (loadWarning)
+          document.getElementById("warning").innerHTML =
+            `<div class="notice" role="alert">${esc(loadWarning)}</div>`;
+        if (legacyCount)
+          toast(
+            `${legacyCount} eski kayıt aktarıldı. History bölümünden kontrol edebilirsin.`,
+          );
+        Object.defineProperty(window, "IronLogDebug", {
+          configurable: true,
+          value: Object.freeze({
+            recommendation: () =>
+              getWorkoutRecommendation(state, localDate(), true),
+          }),
+        });
+        render();
+      })();
+    </script>
+  </body>
+</html>
