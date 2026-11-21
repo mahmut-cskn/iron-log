@@ -1,0 +1,15 @@
+{
+  "name": "IRON LOG - Antrenman Günlüğü",
+  "short_name": "IRON LOG",
+  "description": "Antrenmanlarını hızlıca kaydet ve geçmiş performansını takip et.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0c100d",
+  "theme_color": "#0c100d",
+  "lang": "tr",
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
